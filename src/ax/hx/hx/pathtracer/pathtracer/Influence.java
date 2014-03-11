@@ -44,6 +44,18 @@ public class Influence
 	influencedBy++;
     }
 
+    public void factor(double factor){
+        r *= factor;
+        g *= factor;
+        b *= factor;
+    }
+
+    public void applyColor(Color c){
+        r *= c.r;
+        g *= c.g;
+        b *= c.b;
+    }
+
     public double getR() {
 	return r;
     }

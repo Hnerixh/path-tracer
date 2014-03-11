@@ -5,7 +5,7 @@ package ax.hx.hx.pathtracer.pathtracer;
  */
 public class DummyMaterial implements Material
 {
-    public Ray getRandomRay(Ray incoming, Normal normal){
+    public Ray getRandomRay(Ray incoming, Normal normal, Coordinate3 origin){
         return null;
     }
 

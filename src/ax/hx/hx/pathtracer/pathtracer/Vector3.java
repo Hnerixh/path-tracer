@@ -22,6 +22,11 @@ public class Vector3
         this.z = vec.getZ();
     }
 
+    Vector3(Coordinate3 coord){
+        this.x = coord.x;
+        this.y = coord.y;
+        this.z = coord.z;
+    }
     public void normalize(){
         double length = Math.sqrt(x*x + y*y + z*z);
         x /= length;
@@ -59,6 +64,12 @@ public class Vector3
         double vz = vec.getZ();
 
         return (tx*vx + ty*vy + tz*vz);
+    }
+
+    public void scale(double s){
+        x *= s;
+        y *= s;
+        z *= s;
     }
 
     public void negate(){

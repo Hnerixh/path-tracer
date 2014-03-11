@@ -51,20 +51,22 @@
      }
 
      public Influence traceLastHit(int depth, Scene scene){
-         // This is the place to apply the rendering equation.
          // 1. We ask our material about a new outgoing ray (Which can be null)
          // 2. If we got a new outgoing ray, we trace it,
          //    otherwise set incomingInfluence to NULL_INFLUENCE.
          // 3. Throw the information at the material and see what we get.
 
          // 1. Ask the material about a new ray.
-         Ray newRay = material.getRandomRay(incoming, normal);
+         Ray newRay = material.getRandomRay(incoming, normal, hitCoord);
 
          // 2. Get some incomingInfluence
          Influence incomingInfluence;
          if (newRay == null){
              incomingInfluence = NULL_INFLUENCE;
          }
+
+
+	 // Here is the place for the big recursive happening!! :D
          else {
              incomingInfluence = scene.pathtrace(newRay, depth);
          }

@@ -11,8 +11,11 @@ public abstract class AbstractScene implements Scene
     List<Shape> shapes = new ArrayList<Shape>();
 
     public Influence pathtrace(Ray ray, int depth){
+	if (depth <= 0) {
+	    return new Influence(0,0,0);
+	}
         Shape hit = null;
-        double nearestHit = 0.0;
+        double nearestHit = -1;
         // System.out.println("Pathtracing " + ray);
         Coordinate3 hitCoord = null;
 
@@ -23,7 +26,9 @@ public abstract class AbstractScene implements Scene
                 continue;
             }
             // Apparently we hit something...
-            if (intersection.distance(rayOrigin) > nearestHit){
+	    //System.out.println(intersection.distance(rayOrigin));
+            if (intersection.distance(rayOrigin) <= nearestHit || nearestHit == -1){
+		//System.out.println("passed");
                 hit = shape;
                 nearestHit = intersection.distance(rayOrigin);
                 hitCoord = intersection;
@@ -38,9 +43,10 @@ public abstract class AbstractScene implements Scene
 	    depth--;
 	    return hit.traceLastHit(depth, this);
 	}
+
     }
 
     Influence worldInfluence(Ray ray){
-        return new Influence(0,0,0);
+        return new Influence(0.0,0.0,0.0);
     }
 }

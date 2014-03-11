@@ -17,8 +17,9 @@ import ax.hx.hx.pathtracer.image.RGBImage;
      double focalLength;
      Influence[] influenses;
      RGBImage image;
-     int MAX_DEPTH = 1;
+     int MAX_DEPTH = 9;
      Random rnd;
+     int samplesPerPixel = 0;
 
      Camera(Scene scene, double focalLength, RGBImage image){
          this.scene = scene;
@@ -39,6 +40,8 @@ import ax.hx.hx.pathtracer.image.RGBImage;
          for (int i = 0; i < size; i++) {
              influenses[i].addInfluence(scene.pathtrace(rayForPixel(i), MAX_DEPTH));
          }
+	 samplesPerPixel++;
+	 System.out.println(samplesPerPixel);
      }
 
      public void render(){
@@ -65,9 +68,9 @@ import ax.hx.hx.pathtracer.image.RGBImage;
          // Size of image plane is 1.0;
          // This offsets the coordinates randomly within the pixel.
          // -> Don't need AA.
-//         double pixelSize = 1.0/scale;
-//         x += pixelSize/rnd.nextDouble();
-//         y += pixelSize/rnd.nextDouble();
+         double pixelSize = 1.0/scale;
+         x += pixelSize*rnd.nextDouble()*2;
+         y += pixelSize*rnd.nextDouble()*2;
 
          // Generate ray
          Vector3 vector = new Vector3(x, y, focalLength);

@@ -9,4 +9,13 @@ public class Normal extends Vector3
         super(x,y,z);
         normalize();
         }
+
+    Normal(Normal normal){
+        super(normal);
+    }
+
+    Normal(Vector3 normal){
+        super(normal);
+        normalize();
+    }
 }

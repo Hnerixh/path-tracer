@@ -5,6 +5,6 @@ package ax.hx.hx.pathtracer.pathtracer;
  */
 public interface Material
 {
-    public Ray getRandomRay(Ray incoming, Normal normal);
+    public Ray getRandomRay(Ray ray, Normal normal, Coordinate3 origin);
     public Influence calculateInfluence(Ray incoming, Ray outgoing, Normal normal, Influence incomingInfluence);
 }

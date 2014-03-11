@@ -26,11 +26,11 @@ public class RayFactory
         // coffee. (Average should be like 1.3 times)
 
         double rx, ry, rz;
-        do {
+           do {
             rx = Math.random() * 2.0 - 1.0;
             ry = Math.random() * 2.0 - 1.0;
             rz = Math.random() * 2.0 - 1.0;
-        } while((! insideUnitSphere(rx, ry, rz)) || isZeroVector(rx, ry, rz));
+          } while((! insideUnitSphere(rx, ry, rz)) || isZeroVector(rx, ry, rz));
         // We need to remove the zero vector to avoid division by zero
         // in the normalization step.
 
@@ -49,8 +49,12 @@ public class RayFactory
 
     }
 
+    public static Ray newRayFromNormal(Normal normal, Coordinate3 origin){
+        return new Ray(origin, normal);
+    }
 
-    private static boolean insideUnitSphere(double x, double y, double z){
+
+    public static boolean insideUnitSphere(double x, double y, double z){
         return (x*x + y*y + z*z <= 1);
     }
 
