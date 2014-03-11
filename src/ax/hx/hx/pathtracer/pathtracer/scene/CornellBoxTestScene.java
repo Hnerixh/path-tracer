@@ -7,6 +7,7 @@ import ax.hx.hx.pathtracer.pathtracer.AbstractScene;
 import ax.hx.hx.pathtracer.pathtracer.AbstractShape;
 import ax.hx.hx.pathtracer.pathtracer.camera.Camera;
 import ax.hx.hx.pathtracer.pathtracer.color.Color;
+import ax.hx.hx.pathtracer.pathtracer.material.MirrorMaterial;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
 import ax.hx.hx.pathtracer.pathtracer.material.DiffuseMaterial;
 import ax.hx.hx.pathtracer.pathtracer.material.LightMaterial;
@@ -99,16 +100,23 @@ public class CornellBoxTestScene extends AbstractScene
 	shape.setMaterial(material);
         getShapes().add(shape);
 
-
-	// Add a triangle
-        Coordinate3 a = new Coordinate3(-.9, -0.5, 4.4);
-        Coordinate3 b = new Coordinate3(0,-.5,3);
-        Coordinate3 c = new Coordinate3(.9,-.5,4.4);
-	shape = new TriangleShape(a,b,c);
-	color = new Color(1,1,1);
-	material = new DiffuseMaterial(color);
+	// Add a sphere
+	origin = new Coordinate3(.9, 1, 4.4);
+	shape = new SphereShape(origin, 0.5);
+	color = new Color(1,1,1);{}
+	material = new MirrorMaterial(color);
 	shape.setMaterial(material);
         getShapes().add(shape);
+
+//	// Add a triangle
+//        Coordinate3 a = new Coordinate3(-.9, -0.5, 4.4);
+//        Coordinate3 b = new Coordinate3(0,-.5,3);
+//        Coordinate3 c = new Coordinate3(.9,-.5,4.4);
+//	shape = new TriangleShape(a,b,c);
+//	color = new Color(1,1,1);
+//	material = new DiffuseMaterial(color);
+//	shape.setMaterial(material);
+//        getShapes().add(shape);
 	}
 
     public static void main(String[] args){
