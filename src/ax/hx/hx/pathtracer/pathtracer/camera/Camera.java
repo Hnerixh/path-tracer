@@ -22,11 +22,11 @@ import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
      double focalLength;
      Influence[] influenses;
      RGBImage image;
-     int MAX_DEPTH = 8;
+     int renderDepth = 8;
      Random rnd;
      int samplesPerPixel = 0;
 
-     public Camera(Scene scene, double focalLength, RGBImage image){
+     public Camera(Scene scene, double focalLength, RGBImage image, int renderDepth){
          this.scene = scene;
          this.width = image.getWidth();
          this.heigth = image.getHeight();
@@ -34,6 +34,7 @@ import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
          this.focalLength = focalLength;
          this.image = image;
          this.rnd = new Random();
+	 this.renderDepth = renderDepth;
 
          influenses = new Influence[size];
          for (int i = 0; i < size; i++) {
@@ -43,7 +44,7 @@ import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
 
      public void doPass(){
          for (int i = 0; i < size; i++) {
-             influenses[i].addInfluence(scene.pathtrace(rayForPixel(i), MAX_DEPTH));
+             influenses[i].addInfluence(scene.pathtrace(rayForPixel(i), renderDepth));
          }
 	 samplesPerPixel++;
 	 System.out.println(samplesPerPixel);

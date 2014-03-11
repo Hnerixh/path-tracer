@@ -124,9 +124,9 @@ public class CornellBoxTestScene extends AbstractScene
             ImageOutput output = new PPMOutput(image, new File("/home/hx/tmp/FirstCameraTest.ppm"));
             image.setOutputModule(output);
             Scene scene = new CornellBoxTestScene();
-            Camera camera = new Camera(scene, 1.0, image);
+            Camera camera = new Camera(scene, 1.0, image, 20);
     	 while (true){
-            camera.doPasses(10);
+            camera.doPasses(5);
             camera.render();
             image.output();
                 System.out.println("Wrote to file");

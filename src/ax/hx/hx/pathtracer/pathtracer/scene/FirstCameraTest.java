@@ -15,7 +15,7 @@ public class FirstCameraTest {
         ImageOutput output = new PPMOutput(image, new File("/home/hx/tmp/FirstCameraTest.ppm"));
         image.setOutputModule(output);
         Scene scene = new SphereTestScene();
-        Camera camera = new Camera(scene, 1.0, image);
+        Camera camera = new Camera(scene, 1.0, image, 10);
 	while (true){
         camera.doPasses(100);
         camera.render();
