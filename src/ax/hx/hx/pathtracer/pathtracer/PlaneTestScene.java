@@ -44,6 +44,17 @@ public class PlaneTestScene extends AbstractScene
 	material = new DiffuseMaterial(color);
 	shape.setMaterial(material);
 	shapes.add(shape);
+
+
+//		// Add a triangle
+//        Coordinate3 a = new Coordinate3(1, 1, 4);
+//        Coordinate3 b = new Coordinate3(1, 2,8);
+//        Coordinate3 c = new Coordinate3(0,0,8);
+//	shape = new TriangleShape(a,b,c);
+//	color = new Color(1,1,1);{}
+//	material = new DiffuseMaterial(color);
+//	shape.setMaterial(material);
+//        shapes.add(shape);
     }
 
     public static void main(String[] args){

@@ -17,7 +17,7 @@ import ax.hx.hx.pathtracer.image.RGBImage;
      double focalLength;
      Influence[] influenses;
      RGBImage image;
-     int MAX_DEPTH = 9;
+     int MAX_DEPTH = 3;
      Random rnd;
      int samplesPerPixel = 0;
 

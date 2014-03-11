@@ -87,6 +87,15 @@ public class CornellBoxTestScene extends AbstractScene
         shapes.add(shape);
 
 
+	// Add a triangle
+        Coordinate3 a = new Coordinate3(-.9, .5, 4.4);
+        Coordinate3 b = new Coordinate3(1,0,4.5);
+        Coordinate3 c = new Coordinate3(.9,.5,4.4);
+	shape = new TriangleShape(a,b,c);
+	color = new Color(1,1,1);{}
+	material = new DiffuseMaterial(color);
+	shape.setMaterial(material);
+        shapes.add(shape);
 	}
 
     public static void main(String[] args){

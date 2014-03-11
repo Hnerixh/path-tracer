@@ -72,7 +72,23 @@ public class Vector3
         z *= s;
     }
 
-    public void negate(){
+    public Vector3 crossProduct(Vector3 vec){
+        double ux = this.x;
+        double uy = this.y;
+        double uz = this.z;
+
+        double vx = vec.getX();
+        double vy = vec.getY();
+        double vz = vec.getZ();
+
+        double x = uy*vz - uz*vy;
+        double y = uz*vx - ux*vz;
+        double z = ux*vy - uy*vx;
+
+        return new Vector3(x, y, z);
+    }
+
+    void negate(){
         x = -x;
         y = -y;
         z = -z;
