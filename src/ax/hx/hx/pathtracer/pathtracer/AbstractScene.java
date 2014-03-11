@@ -1,5 +1,9 @@
 package ax.hx.hx.pathtracer.pathtracer;
 
+import ax.hx.hx.pathtracer.pathtracer.color.Influence;
+import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
+import ax.hx.hx.pathtracer.pathtracer.math.Ray;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +12,7 @@ import java.util.List;
  */
 public abstract class AbstractScene implements Scene
 {
-    List<Shape> shapes = new ArrayList<Shape>();
+    private List<Shape> shapes = new ArrayList<Shape>();
 
     public Influence pathtrace(Ray ray, int depth){
 	if (depth <= 0) {
@@ -48,5 +52,13 @@ public abstract class AbstractScene implements Scene
 
     Influence worldInfluence(Ray ray){
         return new Influence(0.0,0.0,0.0);
+    }
+
+    public List<Shape> getShapes() {
+	return shapes;
+    }
+
+    public void setShapes(final List<Shape> shapes) {
+	this.shapes = shapes;
     }
 }
