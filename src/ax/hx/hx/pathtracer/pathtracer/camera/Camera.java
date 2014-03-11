@@ -22,7 +22,7 @@ import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
      double focalLength;
      Influence[] influenses;
      RGBImage image;
-     int MAX_DEPTH = 3;
+     int MAX_DEPTH = 8;
      Random rnd;
      int samplesPerPixel = 0;
 

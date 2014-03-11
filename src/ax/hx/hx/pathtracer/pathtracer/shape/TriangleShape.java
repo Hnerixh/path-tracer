@@ -28,11 +28,14 @@ public class TriangleShape extends AbstractShape
         this.c2 = negateXY(this.c2);
         this.c3 = negateXY(this.c3);
 
-        Vector3 temp1 = new Vector3(c2);
-        Vector3 temp2 = new Vector3(c3);
+        Vector3 temp1 = new Vector3(c1);
+        Vector3 temp2 = new Vector3(c1);
 
-        temp1.subtract(this.c1);
-        temp2.subtract(this.c1);
+        temp1.subtract(this.c2);
+        temp2.subtract(this.c3);
+
+	temp1.normalize();
+	temp2.normalize();
 
         this.normal = new Normal(temp1.crossProduct(temp2));
     }
@@ -121,10 +124,13 @@ public class TriangleShape extends AbstractShape
         Coordinate3 intersection = new Coordinate3(or.getX(), or.getY(), or.getZ());
 
         // How is the normal? Do we need to negate the normal before we save it?
-        Normal normal = new Normal(this.normal);
-        if (dr.dotProduct(normal) > 0){
-            normal.negate();
+        Vector3 vectorNormal = edge1.crossProduct(edge2);
+        if (dr.dotProduct(vectorNormal) > 0){
+            vectorNormal.negate();
         }
+
+	Normal normal = new Normal(vectorNormal);
+
 
         // Set variables for later.
         setNormal(normal);
