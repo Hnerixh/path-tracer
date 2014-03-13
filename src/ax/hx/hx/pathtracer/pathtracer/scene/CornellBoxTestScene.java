@@ -103,7 +103,7 @@ public class CornellBoxTestScene extends AbstractScene
 	origin = new Coordinate3(.9, 1, 5.4);
 	shape = new SphereShape(origin, 0.5);
 	color = new Color(.7,.7,1.0);
-	material = new MirrorMaterial(color);
+	material = new DiffuseMaterial(color);
 	shape.setMaterial(material);
         getShapes().add(shape);
 
@@ -123,9 +123,9 @@ public class CornellBoxTestScene extends AbstractScene
             ImageOutput output = new PPMOutput(image, new File("/home/hx/tmp/FirstCameraTest.ppm"));
             image.setOutputModule(output);
             Scene scene = new CornellBoxTestScene();
-            Camera camera = new Camera(scene, 1.0, image, 30);
+            Camera camera = new Camera(scene, 1.0, image, 2);
     	 while (true){
-            camera.doPasses(1);
+            camera.doPasses(10);
             camera.render();
             image.output();
                 System.out.println("Wrote to file");

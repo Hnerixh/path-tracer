@@ -98,9 +98,9 @@
           normV.subtract(sorigin);
           Normal normal = new Normal(normV);
 
-	  if (normal.dotProduct(vorigin) < 0){
-	      normal.negate();
-	  }
+//	  if (normal.dotProduct(vorigin) < 0){
+//	      normal.negate();
+//	  }
 
 
           // Save hits
