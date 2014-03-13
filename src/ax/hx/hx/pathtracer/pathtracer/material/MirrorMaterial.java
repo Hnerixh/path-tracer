@@ -7,7 +7,6 @@ import ax.hx.hx.pathtracer.pathtracer.color.Influence;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
 import ax.hx.hx.pathtracer.pathtracer.math.Normal;
 import ax.hx.hx.pathtracer.pathtracer.math.Ray;
-import ax.hx.hx.pathtracer.pathtracer.math.RayFactory;
 import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
 
 /**
@@ -33,7 +32,7 @@ public class MirrorMaterial implements Material
         norm.subtract(vec);
         norm.negate();
         norm.normalize();
-        return new Ray (origin, norm);
+        return new Ray (origin, norm, ray.isInsideSomething());
     }
 
     public Influence calculateInfluence(Ray incoming, Ray outgoing, Normal normal, Influence incomingInfluence){

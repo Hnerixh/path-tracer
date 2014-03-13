@@ -6,7 +6,7 @@ package ax.hx.hx.pathtracer.pathtracer.math;
  */
 public class RayFactory
 {
-    public static Ray newCosineImportanceWeightedRay(Normal normal, Coordinate3 origin){
+    public static Ray newCosineImportanceWeightedRay(Normal normal, Coordinate3 origin, Ray ray){
         // There is a need for outgoing rays to be distributed
         // randomly by Lambert's cosine Law.
         //
@@ -45,7 +45,7 @@ public class RayFactory
         vr.normalize();
 
         // 6. Return the randomized ray
-        return new Ray(origin, vr);
+        return new Ray(origin, vr, ray.isInsideSomething());
 
     }
 

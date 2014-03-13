@@ -25,7 +25,7 @@ public class DiffuseMaterial implements Material
         this.color = new Color(1,1,1);
     }
     public Ray getRandomRay(Ray ray, Normal normal, Coordinate3 origin){
-        return RayFactory.newCosineImportanceWeightedRay(normal, origin);
+        return RayFactory.newCosineImportanceWeightedRay(normal, origin, ray);
 	// return RayFactory.newRayFromNormal(normal, origin);
     }
 

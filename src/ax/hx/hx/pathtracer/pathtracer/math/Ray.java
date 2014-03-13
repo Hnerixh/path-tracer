@@ -7,11 +7,26 @@ public class Ray
 {
     private Coordinate3 c;
     private Vector3 v;
+
+
+    private boolean insideSomething = false;
     public Ray(Coordinate3 c, Vector3 v) {
         this.c = c;
         v.normalize();
         this.v = v;
     }
+
+    public Ray(Coordinate3 c, Vector3 v, boolean insideSomething) {
+        this.c = c;
+        v.normalize();
+        this.v = v;
+	this.insideSomething = insideSomething;
+    }
+
+    public boolean isInsideSomething() {
+	return insideSomething;
+    }
+
 
     @Override public String toString() {
 	return "Ray{" +

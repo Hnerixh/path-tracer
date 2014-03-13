@@ -61,20 +61,47 @@
           }
           // Figure out the closest hit
           else {
-              t = Math.min(tca-thc,tca+thc);
-          }
+	      double ta = tca-thc;
+	      double tb = tca+thc;
 
-          t -= 0.000001; // Avoid rounding errors.
+	      // Make ta smaller than tb
+	      if (ta > tb){
+		  t = tb;
+		  tb = ta;
+		  ta = t;
+	      }
+
+	      // Sphere behind observer, return null
+	      if (tb < 0.00001) {
+		 return null;
+	      }
+
+	      // Entire sphere in front of observer
+	      if (ta > 0.00001){
+		 t = ta;
+		  t -= 0.000001; // Avoid rounding errors
+	      }
+	      // Observer in sphere;
+	      else {
+		  t = tb;
+		  t += 0.000001; // Avoid rounding errors
+	      }
+          }
 
           // We have the distance, now work out the intersection point.
           vdirection.scale(t);
           vorigin.add(vdirection);
 
           Coordinate3 intersect = new Coordinate3(vorigin.getX(), vorigin.getY(), vorigin.getZ());
-
+	    Vector3 normV = new Vector3(vorigin);
           // Figure out the normal
-          vorigin.subtract(sorigin);
-          Normal normal = new Normal(vorigin);
+          normV.subtract(sorigin);
+          Normal normal = new Normal(normV);
+
+	  if (normal.dotProduct(vorigin) < 0){
+	      normal.negate();
+	  }
+
 
           // Save hits
           setNormal(normal);
