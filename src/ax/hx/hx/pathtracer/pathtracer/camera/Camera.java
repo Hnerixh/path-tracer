@@ -22,10 +22,10 @@ import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
      double focalLength;
      Influence[] influenses;
      RGBImage image;
-     int renderDepth = 8;
+     int renderDepth = 3;
      Random rnd;
      int samplesPerPixel = 0;
-
+     private static final boolean RUSSIAN = true;
      public Camera(Scene scene, double focalLength, RGBImage image, int renderDepth){
          this.scene = scene;
          this.width = image.getWidth();

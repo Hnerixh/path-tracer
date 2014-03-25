@@ -1,6 +1,7 @@
 package ax.hx.hx.pathtracer.pathtracer.shape;
 
 import ax.hx.hx.pathtracer.pathtracer.AbstractShape;
+import ax.hx.hx.pathtracer.pathtracer.color.IntersectionInfo;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
 import ax.hx.hx.pathtracer.pathtracer.math.Normal;
 import ax.hx.hx.pathtracer.pathtracer.math.Ray;
@@ -52,7 +53,7 @@ public class TriangleShape extends AbstractShape
         return new Vector3(x,y,z);
     }
 
-    public Coordinate3 intersection(Ray ray){
+    public IntersectionInfo intersection(Ray ray){
         // Following:
         // http://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
         //
@@ -133,9 +134,7 @@ public class TriangleShape extends AbstractShape
 
 
         // Set variables for later.
-        setNormal(normal);
-        setIncoming(ray);
-        setHitCoord(intersection);
-        return intersection;
+        IntersectionInfo info = new IntersectionInfo(ray, normal, intersection);
+        return info;
     }
 }

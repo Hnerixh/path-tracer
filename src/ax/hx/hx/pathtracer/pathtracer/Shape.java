@@ -1,6 +1,7 @@
 package ax.hx.hx.pathtracer.pathtracer;
 
 import ax.hx.hx.pathtracer.pathtracer.color.Influence;
+import ax.hx.hx.pathtracer.pathtracer.color.IntersectionInfo;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
 import ax.hx.hx.pathtracer.pathtracer.math.Ray;
 
@@ -9,6 +10,6 @@ import ax.hx.hx.pathtracer.pathtracer.math.Ray;
  */
 public interface Shape
 {
-    Coordinate3 intersection(Ray ray);
-    Influence traceLastHit(int depth, Scene scene);
+    IntersectionInfo intersection(Ray ray);
+    Influence traceLastHit(int depth, Scene scene, IntersectionInfo info);
 }

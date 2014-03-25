@@ -1,6 +1,7 @@
 package ax.hx.hx.pathtracer.pathtracer.shape;
 
 import ax.hx.hx.pathtracer.pathtracer.AbstractShape;
+import ax.hx.hx.pathtracer.pathtracer.color.IntersectionInfo;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
 import ax.hx.hx.pathtracer.pathtracer.math.Normal;
 import ax.hx.hx.pathtracer.pathtracer.math.Ray;
@@ -14,7 +15,7 @@ public class PlaneShape extends AbstractShape
     private Normal planeNormal;
     private Coordinate3 coord;
 
-    public Coordinate3 intersection(Ray ray){
+    public IntersectionInfo intersection(Ray ray){
         // Calculate the intersection between a ray and a plane.
         // http://www.cs.princeton.edu/courses/archive/fall00/cs426/lectures/raycast/sld017.htm
 
@@ -52,12 +53,8 @@ public class PlaneShape extends AbstractShape
             normal.negate();
         }
 
-        // Set variables for our superclass.
-        setNormal(normal);
-        setIncoming(ray);
-        setHitCoord(intersect);
-
-        return intersect;
+        IntersectionInfo info = new IntersectionInfo(ray, normal, intersect);
+        return info;
     }
 
     public PlaneShape(Normal normal, Coordinate3 coord){

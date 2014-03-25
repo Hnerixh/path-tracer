@@ -1,6 +1,7 @@
 package ax.hx.hx.pathtracer.pathtracer;
 
 import ax.hx.hx.pathtracer.pathtracer.color.Influence;
+import ax.hx.hx.pathtracer.pathtracer.color.IntersectionInfo;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
 import ax.hx.hx.pathtracer.pathtracer.math.Ray;
 
@@ -20,22 +21,25 @@ public abstract class AbstractScene implements Scene
 	}
         Shape hit = null;
         double nearestHit = -1;
-        // System.out.println("Pathtracing " + ray);
+
         Coordinate3 hitCoord = null;
+        IntersectionInfo info = null;
 
         Coordinate3 rayOrigin = ray.getOrigin();
         for (Shape shape: shapes) {
-            Coordinate3 intersection = shape.intersection(ray);
-            if (intersection == null){ // if we got null, we did not hit.
+            IntersectionInfo intersectionInfo = shape.intersection(ray);
+
+            if (intersectionInfo == null){ // if we got null, we did not hit.
                 continue;
             }
+            Coordinate3 intersection = intersectionInfo.hitCoord;
             // Apparently we hit something...
-	    //System.out.println(intersection.distance(rayOrigin));
             if (intersection.distance(rayOrigin) <= nearestHit || nearestHit == -1){
 		//System.out.println("passed");
                 hit = shape;
                 nearestHit = intersection.distance(rayOrigin);
                 hitCoord = intersection;
+                info = intersectionInfo;
             }
         }
         // We didn't hit anything :-(
@@ -45,7 +49,7 @@ public abstract class AbstractScene implements Scene
 	else { // We hit something, and hit contains the hit closest
                // to the camera.
 	    depth--;
-	    return hit.traceLastHit(depth, this);
+	    return hit.traceLastHit(depth, this, info);
 	}
 
     }
