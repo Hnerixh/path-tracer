@@ -13,7 +13,7 @@ public class Influence
     double g;
     double b;
 
-    int influencedBy = 1;
+    int influencedBy = 0;
 
     public Influence(double r, double g, double b){
         this.r = r;
@@ -23,10 +23,6 @@ public class Influence
 
     public Influence(){
 	Random rnd = new Random();
-
-	r = rnd.nextDouble();
-	g = rnd.nextDouble();
-	b = rnd.nextDouble();
     }
 
     public RGBPixel getPixel(){
@@ -38,6 +34,13 @@ public class Influence
 
     public void addInfluence(Influence i){
 	// Calculates the avarage of all hits.
+    if (influencedBy == 0){
+        r = i.getR();
+        g = i.getG();
+        b = i.getB();
+        influencedBy ++;
+        return;
+    }
 	r = (r*influencedBy + i.getR())/(influencedBy + 1);
 	g = (g*influencedBy + i.getG())/(influencedBy + 1);
 	b = (b*influencedBy + i.getB())/(influencedBy + 1);

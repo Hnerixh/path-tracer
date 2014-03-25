@@ -49,6 +49,30 @@ public class RayFactory
 
     }
 
+    public static double reflectance(Normal normal, Ray ray, double indexOfRefraction){
+        // How much of the light should be reflected, and how much
+        // should be transmitted?
+
+        // Just to be a little cheap, Schlicks approximation is used
+        // instead of the real fresnell equations.
+        double cosTheta = - normal.dotProduct(ray.getVector());
+
+        double n1 = 1;
+        double n2 = indexOfRefraction;
+        if (ray.isInsideSomething()){
+            n2 = 1; n1 = indexOfRefraction;
+            double n = n1/n2;
+
+            // If so, use the angle from the normal to the other ray.
+            double sin2Theta = n*n* (1- cosTheta*cosTheta);
+            cosTheta = Math.sqrt(1-sin2Theta);
+        }
+        double r0 = (n1-n2)/(n1+n2);
+        r0 *= r0;
+        double x = 1 - cosTheta;
+        return r0 + (1-r0) * x * x * x * x * x;
+    }
+
     public static Ray newRayFromNormal(Normal normal, Coordinate3 origin){
         return new Ray(origin, normal);
     }

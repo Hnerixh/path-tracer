@@ -7,12 +7,8 @@ import ax.hx.hx.pathtracer.pathtracer.AbstractScene;
 import ax.hx.hx.pathtracer.pathtracer.AbstractShape;
 import ax.hx.hx.pathtracer.pathtracer.camera.Camera;
 import ax.hx.hx.pathtracer.pathtracer.color.Color;
-import ax.hx.hx.pathtracer.pathtracer.material.CheckeredDiffuseMaterial;
-import ax.hx.hx.pathtracer.pathtracer.material.MirrorMaterial;
-import ax.hx.hx.pathtracer.pathtracer.material.RefractiveMaterial;
+import ax.hx.hx.pathtracer.pathtracer.material.*;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
-import ax.hx.hx.pathtracer.pathtracer.material.DiffuseMaterial;
-import ax.hx.hx.pathtracer.pathtracer.material.LightMaterial;
 import ax.hx.hx.pathtracer.pathtracer.Material;
 import ax.hx.hx.pathtracer.pathtracer.math.Normal;
 import ax.hx.hx.pathtracer.pathtracer.shape.PlaneShape;
@@ -99,7 +95,7 @@ public class CornellBoxTestScene extends AbstractScene
 	// Add a sphere
 	origin = new Coordinate3(-.5, 1, 4.0);
 	shape = new SphereShape(origin, 0.5);
-	material = new RefractiveMaterial(white, 1.5);
+	material = new RefractiveMaterial(white,1.3);
 	shape.setMaterial(material);
         getShapes().add(shape);
 
@@ -107,7 +103,7 @@ public class CornellBoxTestScene extends AbstractScene
 	origin = new Coordinate3(.4, 1, 5.4);
 	shape = new SphereShape(origin, 0.5);
 	color = new Color(.7,.7,1.0);
-	material = new DiffuseMaterial(new Color(0.41, 0.73, 0.51));
+	material = new MirrorMaterial(new Color(0.41, 0.73, 0.51));
 	shape.setMaterial(material);
         getShapes().add(shape);
 
@@ -123,7 +119,7 @@ public class CornellBoxTestScene extends AbstractScene
 	}
 
     public static void main(String[] args){
-            RGBImage image = new RGBImage(1024,1024);
+            RGBImage image = new RGBImage(512,512);
             ImageOutput output = new PPMOutput(image, new File("/home/hx/tmp/FirstCameraTest.ppm"));
             image.setOutputModule(output);
             Scene scene = new CornellBoxTestScene();

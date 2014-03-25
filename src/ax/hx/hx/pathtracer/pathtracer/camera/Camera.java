@@ -38,7 +38,7 @@ import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
 
          influenses = new Influence[size];
          for (int i = 0; i < size; i++) {
-             influenses[i] = new Influence(0,0,0);
+             influenses[i] = new Influence();
          }
      }
 
