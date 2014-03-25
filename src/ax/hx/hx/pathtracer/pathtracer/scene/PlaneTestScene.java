@@ -15,6 +15,7 @@ import ax.hx.hx.pathtracer.pathtracer.math.Normal;
 import ax.hx.hx.pathtracer.pathtracer.shape.PlaneShape;
 import ax.hx.hx.pathtracer.pathtracer.Scene;
 import ax.hx.hx.pathtracer.pathtracer.shape.SphereShape;
+import ax.hx.hx.pathtracer.pathtracer.shape.TriangleShape;
 
 import java.io.File;
 
@@ -30,7 +31,7 @@ public class PlaneTestScene extends AbstractScene
 	Color color = new Color(0.7,0.0,1.0);
 	Material material = new DiffuseMaterial(color);
 	shape.setMaterial(material);
-        getShapes().add(shape);
+        // getShapes().add(shape);
 
 	// Add a big light to the right
 	origin = new Coordinate3(5,-4,2);
@@ -58,15 +59,15 @@ public class PlaneTestScene extends AbstractScene
 	getShapes().add(shape);
 
 
-//		// Add a triangle
-//        Coordinate3 a = new Coordinate3(1, 1, 4);
-//        Coordinate3 b = new Coordinate3(1, 2,8);
-//        Coordinate3 c = new Coordinate3(0,0,8);
-//	shape = new TriangleShape(a,b,c);
-//	color = new Color(1,1,1);{}
-//	material = new DiffuseMaterial(color);
-//	shape.setMaterial(material);
-//        shapes.add(shape);
+		// Add a triangle
+        Coordinate3 a = new Coordinate3(0.00000,0.0,3.722828);
+        Coordinate3 b = new Coordinate3(0.287557, -0.20892, 3.942504);
+        Coordinate3 c = new Coordinate3(-0.109835, -0.338043, 3.942504);
+	shape = new TriangleShape(a,b,c);
+	color = new Color(1,1,1);{}
+	material = new DiffuseMaterial(color);
+	shape.setMaterial(material);
+        getShapes().add(shape);
     }
 
     public static void main(String[] args){

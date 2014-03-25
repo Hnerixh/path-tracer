@@ -75,10 +75,11 @@ import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
          // This offsets the coordinates randomly within the pixel.
          // -> Don't need AA.
          double pixelSize = 1.0/scale;
-         x += pixelSize*rnd.nextDouble()*2;
-         y += pixelSize*rnd.nextDouble()*2;
+         x += pixelSize*rnd.nextDouble();
+         y += pixelSize*rnd.nextDouble();
 
-         // Generate ray
+
+// Generate ray
          Vector3 vector = new Vector3(x, y, focalLength);
          Coordinate3 coord = new Coordinate3(0,0,0);
          return new Ray(coord, vector);

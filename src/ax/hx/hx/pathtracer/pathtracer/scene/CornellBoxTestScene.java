@@ -7,6 +7,7 @@ import ax.hx.hx.pathtracer.pathtracer.AbstractScene;
 import ax.hx.hx.pathtracer.pathtracer.AbstractShape;
 import ax.hx.hx.pathtracer.pathtracer.camera.Camera;
 import ax.hx.hx.pathtracer.pathtracer.color.Color;
+import ax.hx.hx.pathtracer.pathtracer.material.CheckeredDiffuseMaterial;
 import ax.hx.hx.pathtracer.pathtracer.material.MirrorMaterial;
 import ax.hx.hx.pathtracer.pathtracer.material.RefractiveMaterial;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
@@ -30,8 +31,11 @@ public class CornellBoxTestScene extends AbstractScene
 	// Create a Cornell box of size 3x3x3
 
 	Color white = new Color(.9,.9,.9);
-	Color leftColor = new Color(.9,0.3,0.3);
-	Color rightColor = new Color(0.3,.9,0.3);
+	Color leftColor = new Color(.8,.75,.29);
+	Color rightColor = new Color(0.53,0.26,0.7);
+	    Color checker1 = new Color(.9,.9,.9);
+	    Color checker2 = new Color(.7,.7,.7);
+	    double checkerSize = 0.25;
 
 	// Add a light center
 	Coordinate3 origin = new Coordinate3(0,-1.5,4.5);
@@ -45,7 +49,7 @@ public class CornellBoxTestScene extends AbstractScene
 	origin = new Coordinate3(0,-1.5,0);
 	Normal normal = new Normal(0,1,0);
 	shape = new PlaneShape(normal, origin);
-	material = new DiffuseMaterial(white);
+	material = new CheckeredDiffuseMaterial(checker1, checker2, checkerSize);
 	shape.setMaterial(material);
 	getShapes().add(shape);
 
@@ -79,7 +83,7 @@ public class CornellBoxTestScene extends AbstractScene
 	    normal = new Normal(0,0,1);
 	    color = new Color(.2,.2,.8);
 	    shape = new PlaneShape(normal, origin);
-	    material = new DiffuseMaterial(leftColor);
+	    material = new CheckeredDiffuseMaterial(checker1, checker2, checkerSize);
 	    shape.setMaterial(material);
 	    getShapes().add(shape);
 
@@ -93,17 +97,17 @@ public class CornellBoxTestScene extends AbstractScene
 	    getShapes().add(shape);
 
 	// Add a sphere
-	origin = new Coordinate3(-.9, .9, 4.5);
+	origin = new Coordinate3(-.5, 1, 4.0);
 	shape = new SphereShape(origin, 0.5);
 	material = new RefractiveMaterial(white, 1.5);
 	shape.setMaterial(material);
         getShapes().add(shape);
 
 	// Add a sphere
-	origin = new Coordinate3(.9, 1, 5.4);
+	origin = new Coordinate3(.4, 1, 5.4);
 	shape = new SphereShape(origin, 0.5);
 	color = new Color(.7,.7,1.0);
-	material = new DiffuseMaterial(color);
+	material = new DiffuseMaterial(new Color(0.41, 0.73, 0.51));
 	shape.setMaterial(material);
         getShapes().add(shape);
 
@@ -119,11 +123,11 @@ public class CornellBoxTestScene extends AbstractScene
 	}
 
     public static void main(String[] args){
-            RGBImage image = new RGBImage(512,512);
+            RGBImage image = new RGBImage(1024,1024);
             ImageOutput output = new PPMOutput(image, new File("/home/hx/tmp/FirstCameraTest.ppm"));
             image.setOutputModule(output);
             Scene scene = new CornellBoxTestScene();
-            Camera camera = new Camera(scene, 1.0, image, 2);
+            Camera camera = new Camera(scene, 1.0, image, 16);
     	 while (true){
             camera.doPasses(10);
             camera.render();
