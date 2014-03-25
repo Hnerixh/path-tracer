@@ -55,7 +55,7 @@ public class BackgroundTestScene extends AbstractScene {
         Scene scene = new BackgroundTestScene();
         Camera camera = new Camera(scene, 1.0, image, 10);
         while (true){
-            camera.doPasses(1);
+            camera.doPasses(10);
             camera.render();
             image.output();
             System.out.println("Wrote to file");
