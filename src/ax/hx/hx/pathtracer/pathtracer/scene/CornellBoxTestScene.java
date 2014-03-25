@@ -119,16 +119,24 @@ public class CornellBoxTestScene extends AbstractScene
 	}
 
     public static void main(String[] args){
-            RGBImage image = new RGBImage(512,512);
+            RGBImage image = new RGBImage(1024,1024);
             ImageOutput output = new PPMOutput(image, new File("/home/hx/tmp/FirstCameraTest.ppm"));
             image.setOutputModule(output);
             Scene scene = new CornellBoxTestScene();
             Camera camera = new Camera(scene, 1.0, image, 16);
-    	 while (true){
+        int i = 0;
+        long epochStart = System.currentTimeMillis();
+    	 while (i < 3){
             camera.doPasses(10);
             camera.render();
             image.output();
                 System.out.println("Wrote to file");
-    	 }
+    	    i++;
+         }
+        long epochEnd = System.currentTimeMillis();
+        long time = epochStart - epochEnd;
+        long timePerSample = time/(1024*1024*100);
+        long seconds = time/1000;
+        System.out.println("Total time:" + time + " Time per sample:" + timePerSample);
         }
 }

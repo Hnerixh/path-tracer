@@ -117,11 +117,10 @@ import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
          return new Ray(coord, vector);
      }
 
-     private void takeResults(int passes){
-         int numberOfResults = passes*size;
+     private void takeResults(){
          TraceResult res;
          try {
-             for (int i = 0; i < numberOfResults; i++) {
+             for (int i = 0; i < size; i++) {
                  res = resultQueue.take();
                  influenses[res.pixel].addInfluence(res.influence);
                  totalTraces++;
@@ -134,7 +133,9 @@ import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
      }
 
      public void doPasses(int x){
-         queuePasses(x);
-         takeResults(x);
+         for (int i = 0; i < x; i++) {
+             queuePass();
+             takeResults();
+         }
      }
  }
