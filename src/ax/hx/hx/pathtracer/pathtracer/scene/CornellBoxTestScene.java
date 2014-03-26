@@ -103,7 +103,7 @@ public class CornellBoxTestScene extends AbstractScene
 	origin = new Coordinate3(.4, 1, 5.4);
 	shape = new SphereShape(origin, 0.5);
 	color = new Color(.7,.7,1.0);
-	material = new MirrorMaterial(new Color(0.41, 0.73, 0.51));
+	material = new DiffuseMirrorBlend(new Color(0.41, 0.73, 0.51),0.5);
 	shape.setMaterial(material);
         getShapes().add(shape);
 
@@ -123,20 +123,12 @@ public class CornellBoxTestScene extends AbstractScene
             ImageOutput output = new PPMOutput(image, new File("/home/hx/tmp/FirstCameraTest.ppm"));
             image.setOutputModule(output);
             Scene scene = new CornellBoxTestScene();
-            Camera camera = new Camera(scene, 1.0, image, 16);
-        int i = 0;
-        long epochStart = System.currentTimeMillis();
-    	 while (i < 3){
+            Camera camera = new Camera(scene, 1.0, image, 16, 8);
+    	 while (true){
             camera.doPasses(10);
             camera.render();
             image.output();
                 System.out.println("Wrote to file");
-    	    i++;
          }
-        long epochEnd = System.currentTimeMillis();
-        long time = epochStart - epochEnd;
-        long timePerSample = time/(1024*1024*100);
-        long seconds = time/1000;
-        System.out.println("Total time:" + time + " Time per sample:" + timePerSample);
         }
 }

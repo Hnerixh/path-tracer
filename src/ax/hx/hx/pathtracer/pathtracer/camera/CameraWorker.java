@@ -24,7 +24,7 @@ public class CameraWorker implements Runnable {
     private int width;
     private int heigth;
     private int size;
-    private boolean wait;
+    private Influence[] influences;
 
     CameraWorker(BlockingQueue<CameraJob> jobQueue,
                  BlockingQueue<TraceResult> resultQueue,
@@ -34,7 +34,7 @@ public class CameraWorker implements Runnable {
                  int width,
                  int heigth,
                  double focalLength,
-                 boolean wait){
+                 Influence[] influences){
 
         this.jobQueue = jobQueue;
         this.resultQueue = resultQueue;
@@ -43,9 +43,9 @@ public class CameraWorker implements Runnable {
         this.killswitch = killswitch;
         this.width = width;
         this.heigth = heigth;
-        this.wait = wait;
         this.size = width*heigth;
         this.focalLength = focalLength;
+        this.influences = influences;
 
         this.rnd = new Random();
     }
@@ -58,14 +58,19 @@ public class CameraWorker implements Runnable {
                 return;
             }
             try {
-                if (wait) {jobQueue.take();}
-                for (int i = 0; i < size; i++) {
+                job = jobQueue.take();
+                int traces = 0;
+                for (int i = job.start; i < job.end; i++) {
                     influence = scene.pathtrace(rayForPixel(i), depth);
-                    resultQueue.put(new TraceResult(i, influence));
+                    influences[i].addInfluence(influence);
+                    traces++;
                 }
+                resultQueue.put(new TraceResult(traces));
+                traces = 0;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
         }
     }
 

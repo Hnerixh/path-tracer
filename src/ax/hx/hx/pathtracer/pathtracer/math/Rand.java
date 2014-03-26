@@ -9,10 +9,15 @@ import java.util.Random;
  * we don't care about the race conditions that are guaranteed to happen almost all the time.
  */
 public class Rand {
-    private static long seed = (new Random()).nextInt();
+    private static long seed = (new Random()).nextInt(214748);
+    // The multiplier and incrementation are the same as in glibc.
     public static double rand(){
-            seed = (seed * 32719L + 3L) % 2147483648L;
-            return ((double) ((seed + 1) % 2147483648L))/(2147483648.0);
+            seed = (seed * 1103515245 + 12345) % 2147483648L;
+            return ((double) (seed))/2147483648.0;
     }
-
+    public static void main(String[] args){
+            while(true){
+                System.out.println(rand());
+            }
+    }
 }

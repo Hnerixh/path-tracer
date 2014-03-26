@@ -21,18 +21,26 @@ import ax.hx.hx.pathtracer.pathtracer.color.Influence;
      double focalLength;
      Influence[] influenses;
      RGBImage image;
-     int renderDepth = 3;
+     int renderDepth;
      Random rnd;
      int totalTraces = 0;
-     private static final boolean RUSSIAN = true;
+     private boolean hasWorkers = false;
 
      CameraWorkerInfo killswitch = new CameraWorkerInfo();
-     int workers = 7;
+     int workers = 2;
 
      private BlockingQueue<CameraJob> jobQueue;
      private BlockingQueue<TraceResult> resultQueue;
 
      public Camera(Scene scene, double focalLength, RGBImage image, int renderDepth){
+         init(scene, focalLength, image, renderDepth, workers);
+     }
+
+     public Camera(Scene scene, double focalLength, RGBImage image, int renderDepth, int workers){
+         init(scene, focalLength, image, renderDepth, workers);
+     }
+
+     private void init(Scene scene, double focalLength, RGBImage image, int renderDepth, int workers){
          this.scene = scene;
          this.width = image.getWidth();
          this.heigth = image.getHeight();
@@ -41,34 +49,53 @@ import ax.hx.hx.pathtracer.pathtracer.color.Influence;
          this.image = image;
          this.rnd = new Random();
          this.renderDepth = renderDepth;
+         this.workers = workers;
 
          jobQueue = new ArrayBlockingQueue<CameraJob>(size);
          resultQueue = new ArrayBlockingQueue<TraceResult>(size);
-
-         createWorkers();
 
          influenses = new Influence[size];
          for (int i = 0; i < size; i++) {
              influenses[i] = new Influence();
          }
+
+         createWorkers();
+     }
+
+     public void killWorkers(){
+         killswitch.kill();
      }
 
      private void createWorkers(){
          CameraWorker worker;
          Thread workerThread;
          for (int i = 0; i < workers; i++) {
-             worker = new CameraWorker(jobQueue, resultQueue, renderDepth, scene, killswitch, width, heigth, focalLength, true);
+             worker = new CameraWorker(jobQueue, resultQueue, renderDepth, scene, killswitch, width, heigth, focalLength, influenses);
              workerThread = new Thread(worker);
              workerThread.start();
+             hasWorkers = true;
          }
      }
 
      private void queuePasses(int passes){
          for (int i = 0; i < passes; i++) {
-             try {
-                 jobQueue.put(new CameraJob());
-             } catch (InterruptedException e) {
-                 e.printStackTrace();
+             int start = 0;
+             int step = size/workers;
+             int end = step;
+             for (int j = 0; j < workers; j++) {
+                 try {
+                     jobQueue.put(new CameraJob(start, end));
+                 } catch (InterruptedException e) {
+                     e.printStackTrace();
+                 }
+                 if (j == workers - 1){
+                        start = end;
+                        end = size;
+                    }
+                    else {
+                        start = end;
+                        end += step;
+                    }
              }
          }
      }
@@ -80,23 +107,22 @@ import ax.hx.hx.pathtracer.pathtracer.color.Influence;
      }
 
 
-     private void takeResults(int passes){
+     private void waitForWorkers(int passes){
          TraceResult res;
          try {
-             for (int i = 0; i < size*passes; i++) {
-                 res = resultQueue.take();
-                 influenses[res.pixel].addInfluence(res.influence);
-                 totalTraces++;
-                 if (totalTraces % size == 0) {
-                     System.out.println(totalTraces / size);
-                 }
+             for (int i = 0; i < workers*passes; i++) {
+                totalTraces += resultQueue.take().traces;
+                System.out.println(((double) totalTraces / (double) size) + " samples per pixel");
              }
          }
          catch (InterruptedException e) { System.out.println("Sorry, the camera got interrupted");}
      }
 
-     public void doPasses(int x){
-             queuePasses(x);
-             takeResults(x);
+     public void doPasses(int passes){
+          if(!hasWorkers){
+              System.out.println("Killing of workers should only be used for benchmarking purposes. You just did something terribly wrong.");
+          }
+             queuePasses(passes);
+             waitForWorkers(passes);
      }
  }
