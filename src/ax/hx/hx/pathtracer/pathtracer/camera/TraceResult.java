@@ -8,8 +8,8 @@ import ax.hx.hx.pathtracer.pathtracer.color.Influence;
 public class TraceResult {
     public int pixel;
     public Influence influence;
-    public TraceResult(TraceJob job, Influence influence){
-        this.pixel = job.pixel;
+    public TraceResult(int pixel, Influence influence){
+        this.pixel = pixel;
         this.influence = influence;
     }
 }
