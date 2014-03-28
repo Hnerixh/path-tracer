@@ -108,12 +108,4 @@
           IntersectionInfo hit = new IntersectionInfo(ray, normal, intersect);
           return hit;
       }
-
-      private Ray transformedRay(Ray ray){
-          Coordinate3 o = ray.getOrigin();
-          o = new Coordinate3(o);
-          o.add(origin);
-
-          return new Ray(o, ray.getVector());
-      }
 }

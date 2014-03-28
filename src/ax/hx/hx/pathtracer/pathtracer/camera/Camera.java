@@ -23,7 +23,7 @@ import ax.hx.hx.pathtracer.pathtracer.color.Influence;
      RGBImage image;
      int renderDepth;
      Random rnd;
-     int totalTraces = 0;
+     long totalTraces = 0; // Fun overflow after 1.5 hours if it happens to be an int.
      private boolean hasWorkers = false;
 
      CameraWorkerInfo killswitch = new CameraWorkerInfo();

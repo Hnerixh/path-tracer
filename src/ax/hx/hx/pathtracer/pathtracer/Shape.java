@@ -12,4 +12,5 @@ public interface Shape
 {
     IntersectionInfo intersection(Ray ray);
     Influence traceLastHit(int depth, Scene scene, IntersectionInfo info);
+    public void setMaterial(Material material);
 }

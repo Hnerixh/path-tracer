@@ -20,7 +20,7 @@ public abstract class AbstractScene implements Scene
 
     public Influence pathtrace(Ray ray, int depth){
 	if (depth <= 0) {
-	    return new Influence(0,0,0); // This had zero influence.
+	    return new Influence(); // This had null influence.
 	}
         Shape hit = null;
         double nearestHit = -1;

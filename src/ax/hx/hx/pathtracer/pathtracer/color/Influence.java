@@ -12,6 +12,7 @@ public class Influence
     double r;
     double g;
     double b;
+    boolean null_influence = false;
 
     int influencedBy = 0;
 
@@ -22,7 +23,7 @@ public class Influence
     }
 
     public Influence(){
-	Random rnd = new Random();
+	    null_influence = true;
     }
 
     public RGBPixel getPixel(){
@@ -34,13 +35,19 @@ public class Influence
 
     public void addInfluence(Influence i){
 	// Calculates the avarage of all hits.
-    if (influencedBy == 0){
+    if(i.null_influence){
+        return;
+    }
+
+    if (this.null_influence){
         r = i.getR();
         g = i.getG();
         b = i.getB();
         influencedBy ++;
+        null_influence = false;
         return;
     }
+
 	r = (r*influencedBy + i.getR())/(influencedBy + 1);
 	g = (g*influencedBy + i.getG())/(influencedBy + 1);
 	b = (b*influencedBy + i.getB())/(influencedBy + 1);
