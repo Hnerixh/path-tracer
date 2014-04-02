@@ -27,16 +27,16 @@ public class CornellBoxTestScene extends AbstractScene
         // Create a Cornell box of size 3x3x3
 
         Color white = new Color(.9,.9,.9);
-        Color leftColor = new Color(.8,.75,.29);
-        Color rightColor = new Color(0.53,0.26,0.7);
+        Color leftColor = new Color(0.75, 0.25, 0.25);
+        Color rightColor = new Color(0.24, 0.25, 0.75);
         Color checker1 = new Color(.9,.9,.9);
-        Color checker2 = new Color(.7,.7,.7);
+        Color checker2 = new Color(.9,.9,.9);
         double checkerSize = 0.25;
 
         // Add a light center
         Coordinate3 origin = new Coordinate3(0,-1.5,4.5);
         AbstractShape shape = new SphereShape(origin, 0.5);
-        Color color = new Color(4,4,4);
+        Color color = new Color(1,1,1);
         Material material = new LightMaterial(color);
         shape.setMaterial(material);
         getShapes().add(shape);
@@ -95,7 +95,7 @@ public class CornellBoxTestScene extends AbstractScene
         // Add a sphere
         origin = new Coordinate3(-.5, 1, 4.0);
         shape = new SphereShape(origin, 0.5);
-        material = new RefractiveMaterial(white,1.3);
+        material = new DiffuseMaterial(white);
         shape.setMaterial(material);
         getShapes().add(shape);
 
@@ -103,7 +103,7 @@ public class CornellBoxTestScene extends AbstractScene
         origin = new Coordinate3(.4, 1, 5.4);
         shape = new SphereShape(origin, 0.5);
         color = new Color(.7,.7,1.0);
-        material = new MirrorMaterial(new Color(0.41, 0.73, 0.51));
+        material = new DiffuseMaterial(white);
         shape.setMaterial(material);
         getShapes().add(shape);
 
@@ -119,13 +119,13 @@ public class CornellBoxTestScene extends AbstractScene
     }
 
     public static void main(String[] args){
-        RGBImage image = new RGBImage(1024,1024);
+        RGBImage image = new RGBImage(2048, 2048);
         ImageOutput output = new PPMOutput(image, new File("/home/hx/tmp/FirstCameraTest.ppm"));
         image.setOutputModule(output);
         Scene scene = new CornellBoxTestScene();
         Camera camera = new Camera(scene, 1.0, image, 16, 8);
         while (true){
-            camera.doPasses(10);
+            camera.doPasses(8);
             camera.render();
             image.output();
             System.out.println("Wrote to file");

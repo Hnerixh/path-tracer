@@ -20,7 +20,7 @@ import java.io.File;
 public class BackgroundTestScene extends AbstractScene {
     public BackgroundTestScene(){
 
-        Background background = new Background(new File("/home/hx/tmp/background.jpg"));
+        Background background = new Background(new File("/home/hx/tmp/warehouse.jpg"));
         this.setBackground(background);
         Coordinate3 origin;
         Shape shape;
@@ -36,7 +36,7 @@ public class BackgroundTestScene extends AbstractScene {
         getShapes().add(shape);
 
         // Add monkey
-        shape = new MeshShape(new File("/home/hx/bunny.raw"));
+        shape = new MeshShape(new File("/home/hx/sibenik.raw"));
         color = new Color(0.9,0.9,0.9);
         material = new DiffuseMirrorBlend(color, 0.5);
         shape.setMaterial(material);
@@ -48,9 +48,9 @@ public class BackgroundTestScene extends AbstractScene {
         ImageOutput output = new PPMOutput(image, new File("/home/hx/tmp/FirstCameraTest.ppm"));
         image.setOutputModule(output);
         Scene scene = new BackgroundTestScene();
-        Camera camera = new Camera(scene, 1.0, image, 10, 8);
+        Camera camera = new Camera(scene, 1.0, image, 3, 8);
         while (true){
-            camera.doPasses(1);
+            camera.doPasses(4);
             camera.render();
             image.output();
             System.out.println("Wrote to file");
