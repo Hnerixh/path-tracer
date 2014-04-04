@@ -103,9 +103,9 @@ public class SceneParser {
             }
 
             if (line.startsWith("bgpic")) {
-                    line_parts = line.split(" ");
-                    background = new Background(new File(line_parts[1]));
-                    continue;
+                line_parts = line.split(" ");
+                background = new Background(new File(line_parts[1]));
+                continue;
             }
 
             if (line.startsWith("bgrgb")) {
@@ -116,141 +116,144 @@ public class SceneParser {
                 background = new Background(r, g, b);
                 continue;
             }
-        System.out.println("Unknown option: " + line);
+            System.out.println("Unknown option: " + line);
         }
 
-            // Read material info
+        // Read material info
         while ((line = readLine()) != null
                && (!line.equals("shapes"))){
-                   if (line.startsWith("diff")){
-                        line_parts = line.split(" ");
-                        double r = Double.parseDouble(line_parts[1]);
-                        double g = Double.parseDouble(line_parts[2]);
-                        double b = Double.parseDouble(line_parts[3]);
-                        materials.add(new DiffuseMaterial(new Color(r,g,b)));
-                        continue;
-                   }
+            if (line.startsWith("diff")){
+                line_parts = line.split(" ");
+                double r = Double.parseDouble(line_parts[1]);
+                double g = Double.parseDouble(line_parts[2]);
+                double b = Double.parseDouble(line_parts[3]);
+                materials.add(new DiffuseMaterial(new Color(r,g,b)));
+                continue;
+            }
 
-                   if (line.startsWith("dmblend")) {
-                        line_parts = line.split(" ");
-                        double r = Double.parseDouble(line_parts[1]);
-                        double g = Double.parseDouble(line_parts[2]);
-                        double b = Double.parseDouble(line_parts[3]);
-                        double ior = Double.parseDouble(line_parts[4]);
-                        materials.add(new DiffuseMirrorBlend(new Color(r,g,b),ior));
-                   }
+            if (line.startsWith("dmblend")) {
+                line_parts = line.split(" ");
+                double r = Double.parseDouble(line_parts[1]);
+                double g = Double.parseDouble(line_parts[2]);
+                double b = Double.parseDouble(line_parts[3]);
+                double ior = Double.parseDouble(line_parts[4]);
+                materials.add(new DiffuseMirrorBlend(new Color(r,g,b),ior));
+            }
 
-                   if (line.startsWith("mirror")){
-                        line_parts = line.split(" ");
-                        double r = Double.parseDouble(line_parts[1]);
-                        double g = Double.parseDouble(line_parts[2]);
-                        double b = Double.parseDouble(line_parts[3]);
-                        materials.add(new MirrorMaterial(new Color(r,g,b)));
-                        continue;
-                   }
+            if (line.startsWith("mirror")){
+                line_parts = line.split(" ");
+                double r = Double.parseDouble(line_parts[1]);
+                double g = Double.parseDouble(line_parts[2]);
+                double b = Double.parseDouble(line_parts[3]);
+                materials.add(new MirrorMaterial(new Color(r,g,b)));
+                continue;
+            }
 
-                   if (line.startsWith("light")){
-                        line_parts = line.split(" ");
-                        double r = Double.parseDouble(line_parts[1]);
-                        double g = Double.parseDouble(line_parts[2]);
-                        double b = Double.parseDouble(line_parts[3]);
-                        materials.add(new LightMaterial(new Color(r,g,b)));
-                        continue;
-                   }
+            if (line.startsWith("light")){
+                line_parts = line.split(" ");
+                double r = Double.parseDouble(line_parts[1]);
+                double g = Double.parseDouble(line_parts[2]);
+                double b = Double.parseDouble(line_parts[3]);
+                materials.add(new LightMaterial(new Color(r,g,b)));
+                continue;
+            }
 
-                   if (line.startsWith("refr")) {
-                        line_parts = line.split(" ");
-                        double r = Double.parseDouble(line_parts[1]);
-                        double g = Double.parseDouble(line_parts[2]);
-                        double b = Double.parseDouble(line_parts[3]);
-                        double ior = Double.parseDouble(line_parts[4]);
-                        materials.add(new RefractiveMaterial(new Color(r,g,b),ior));
-                        continue;
-                   }
-                   System.out.println("Unknown material: " + line);
-               }
+            if (line.startsWith("refr")) {
+                line_parts = line.split(" ");
+                double r = Double.parseDouble(line_parts[1]);
+                double g = Double.parseDouble(line_parts[2]);
+                double b = Double.parseDouble(line_parts[3]);
+                double ior = Double.parseDouble(line_parts[4]);
+                materials.add(new RefractiveMaterial(new Color(r,g,b),ior));
+                continue;
+            }
+            System.out.println("Unknown material: " + line);
+        }
 
-               // Read shapes
-               while ((line = readLine()) != null) {
-                   if (line.startsWith("sphere")){
-                       line_parts = line.split(" ");
-                       double x = Double.parseDouble(line_parts[2]);
-                       double y = Double.parseDouble(line_parts[3]);
-                       double z = Double.parseDouble(line_parts[4]);
-                       double r = Double.parseDouble(line_parts[5]);
-                       Shape sh = new SphereShape(new Coordinate3(x,y,z), r);
-                       int matIndex = Integer.parseInt(line_parts[1]);
-                       Material mat = materials.get(matIndex);
-                       sh.setMaterial(mat);
-                       shapes.add(sh);
-                       continue;
-                   }
+        // Read shapes
+        while ((line = readLine()) != null) {
+            if (line.startsWith("sphere")){
+                line_parts = line.split(" ");
+                double x = Double.parseDouble(line_parts[2]);
+                double y = Double.parseDouble(line_parts[3]);
+                double z = Double.parseDouble(line_parts[4]);
+                double r = Double.parseDouble(line_parts[5]);
+                Shape sh = new SphereShape(new Coordinate3(x,y,z), r);
+                int matIndex = Integer.parseInt(line_parts[1]);
+                Material mat = materials.get(matIndex);
+                sh.setMaterial(mat);
+                shapes.add(sh);
+                continue;
+            }
 
-                   if (line.startsWith("sphere")){
-                       line_parts = line.split(" ");
-                       double x = Double.parseDouble(line_parts[2]);
-                       double y = Double.parseDouble(line_parts[3]);
-                       double z = Double.parseDouble(line_parts[4]);
+            if (line.startsWith("sphere")){
+                line_parts = line.split(" ");
+                double x = Double.parseDouble(line_parts[2]);
+                double y = Double.parseDouble(line_parts[3]);
+                double z = Double.parseDouble(line_parts[4]);
 
-                       double xn = Double.parseDouble(line_parts[5]);
-                       double yn = Double.parseDouble(line_parts[6]);
-                       double zn = Double.parseDouble(line_parts[7]);
+                double xn = Double.parseDouble(line_parts[5]);
+                double yn = Double.parseDouble(line_parts[6]);
+                double zn = Double.parseDouble(line_parts[7]);
 
-                       Shape sh = new PlaneShape(new Normal(xn, yn, zn),
-                                                 new Coordinate3(x,y,z));
-                       int matIndex = Integer.parseInt(line_parts[1]);
-                       Material mat = materials.get(matIndex);
-                       sh.setMaterial(mat);
-                       shapes.add(sh);
-                       continue;
-                   }
+                Shape sh = new PlaneShape(new Normal(xn, yn, zn),
+                                          new Coordinate3(x,y,z));
+                int matIndex = Integer.parseInt(line_parts[1]);
+                Material mat = materials.get(matIndex);
+                sh.setMaterial(mat);
+                shapes.add(sh);
+                continue;
+            }
 
-                   if (line.startsWith("mesh")) {
-                       line_parts = line.split(" ");
-                       Shape sh = new MeshShape(new File(line_parts[2]));
-                       int matIndex = Integer.parseInt(line_parts[1]);
-                       Material mat = materials.get(matIndex);
-                       sh.setMaterial(mat);
-                       shapes.add(sh);
-                       continue;
-                   }
-                   System.out.println("Unknown shape: " + line);
-               }
+            if (line.startsWith("mesh")) {
+                line_parts = line.split(" ");
+                Shape sh = new MeshShape(new File(line_parts[2]));
+                int matIndex = Integer.parseInt(line_parts[1]);
+                Material mat = materials.get(matIndex);
+                sh.setMaterial(mat);
+                shapes.add(sh);
+                continue;
+            }
+            System.out.println("Unknown shape: " + line);
+        }
 
-               // Everything parsed, let's create a Renderer
-               SimpleScene scene = new SimpleScene();
-               scene.setShapes(shapes);
-               scene.setBackground(background);
+        // Everything parsed, let's create a Renderer
+        SimpleScene scene = new SimpleScene();
+        scene.setShapes(shapes);
+        scene.setBackground(background);
 
-               RGBImage image = new RGBImage(xSize, ySize);
-               ImageOutput imageOutput = new PPMOutput(image, outputPath);
-               image.setOutputModule(imageOutput);
+        RGBImage image = new RGBImage(xSize, ySize);
+        ImageOutput imageOutput = new PPMOutput(image, outputPath);
+        image.setOutputModule(imageOutput);
 
-               int cores = Runtime.getRuntime().availableProcessors();
-               Camera camera = new Camera(scene, focal_length, image, depth, cores);
+        int cores = Runtime.getRuntime().availableProcessors();
+        Camera camera = new Camera(scene, focal_length, image, depth, cores);
 
-            Renderer renderer = new Renderer(camera, image, write_interval, target_spp);
+        Renderer renderer = new Renderer(camera,
+                                         image,
+                                         write_interval,
+                                         target_spp);
 
-            return renderer;
+        return renderer;
     }
 
-        private static String readLine() {
-            String line;
-            try {
-                // Read to the next non-empty, non comment line.
-                while ((line = br.readLine()) != null) {
-                    if (line.isEmpty()) {
-                        continue;
-                    }
-                    if (line.startsWith("#")) {
-                        continue;
-                    }
-                    return line;
+    private static String readLine() {
+        String line;
+        try {
+            // Read to the next non-empty, non comment line.
+            while ((line = br.readLine()) != null) {
+                if (line.isEmpty()) {
+                    continue;
                 }
-            } catch (IOException e) {
-                System.out.println(e);
-            } finally {
-                return null;
+                if (line.startsWith("#")) {
+                    continue;
+                }
+                return line;
             }
+        } catch (IOException e) {
+            System.out.println(e);
+        } finally {
+            return null;
         }
     }
+}
