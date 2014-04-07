@@ -12,8 +12,8 @@
    */
   public class SphereShape extends AbstractShape
   {
-      private Coordinate3 origin;
-      private double radius;
+      private final Coordinate3 origin;
+      private final double radius;
       public SphereShape(Coordinate3 origin, double radius){
           this.origin = origin;
           this.radius = radius;
@@ -105,7 +105,6 @@
 
 
           // Save hits
-          IntersectionInfo hit = new IntersectionInfo(ray, normal, intersect);
-          return hit;
+          return new IntersectionInfo(ray, normal, intersect);
       }
 }

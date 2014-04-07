@@ -8,12 +8,12 @@ import ax.hx.hx.pathtracer.pathtracer.math.Ray;
 import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
 
 /**
- * Created by hx on 3/10/14.
+ * Infinite plane shape. Initialized with a coordinate and a normal.
  */
 public class PlaneShape extends AbstractShape
 {
-    private Normal planeNormal;
-    private Coordinate3 coord;
+    private final Normal planeNormal;
+    private final Coordinate3 coord;
 
     public IntersectionInfo intersection(Ray ray){
         // Calculate the intersection between a ray and a plane.
@@ -53,8 +53,7 @@ public class PlaneShape extends AbstractShape
             normal.negate();
         }
 
-        IntersectionInfo info = new IntersectionInfo(ray, normal, intersect);
-        return info;
+        return new IntersectionInfo(ray, normal, intersect);
     }
 
     public PlaneShape(Normal normal, Coordinate3 coord){

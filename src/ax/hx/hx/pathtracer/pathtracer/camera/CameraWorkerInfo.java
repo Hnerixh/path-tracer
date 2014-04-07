@@ -1,9 +1,9 @@
 package ax.hx.hx.pathtracer.pathtracer.camera;
 
 /**
- * Created by hx on 3/25/14.
+ * Used for killing off all the CameraWorkers
  */
-public class CameraWorkerInfo {
+class CameraWorkerInfo {
     private boolean shouldDie = false;
     public CameraWorkerInfo(){
     }

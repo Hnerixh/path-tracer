@@ -28,8 +28,8 @@ import java.io.Writer;
  */
 public class PPMOutput implements ImageOutput
 {
-    private RGBImage image;
-    private File file;
+    private final RGBImage image;
+    private final File file;
 
     public PPMOutput(RGBImage image, File file){
         this.image = image;
@@ -61,7 +61,7 @@ public class PPMOutput implements ImageOutput
         }
             // Some error handling
             // The file will be found, it was just created.
-            catch (FileNotFoundException e){}
+            catch (FileNotFoundException ignored){}
             catch (IOException e){System.out.println("Could not write file...");}
     }
 
@@ -69,17 +69,4 @@ public class PPMOutput implements ImageOutput
         return (pixel.getR() + " " + pixel.getG() + " " + pixel.getB() + "\n");
     }
 
-    /**
-     * @return the file
-     */
-    public File getFile() {
-        return file;
-    }
-
-    /**
-     * @param set the file to write to
-     */
-    public void setFile(File file) {
-        this.file = file;
-    }
 }

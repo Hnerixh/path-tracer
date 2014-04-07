@@ -22,9 +22,9 @@ import java.io.File;
 /**
  * This file is used for testing planes and spheres.
  */
-public class PlaneTestScene extends AbstractScene
+class PlaneTestScene extends AbstractScene
 {
-    public PlaneTestScene(){
+    private PlaneTestScene(){
 	// Add a sphere in the middle of the scene.
 	Coordinate3 origin = new Coordinate3(0,0,3.0);
 	AbstractShape shape = new SphereShape(origin, 0.5);
@@ -75,7 +75,7 @@ public class PlaneTestScene extends AbstractScene
             ImageOutput output = new PPMOutput(image, new File("/home/hx/tmp/FirstCameraTest.ppm"));
             image.setOutputModule(output);
             Scene scene = new PlaneTestScene();
-            Camera camera = new Camera(scene, 1.0, image, 10);
+            Camera camera = new Camera(scene, 1.0, image, 10, 8);
             // while (true){
             camera.doPasses(10);
             camera.render();

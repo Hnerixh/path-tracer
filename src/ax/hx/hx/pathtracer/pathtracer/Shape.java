@@ -1,16 +1,17 @@
 package ax.hx.hx.pathtracer.pathtracer;
 
-import ax.hx.hx.pathtracer.pathtracer.color.Influence;
+import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 import ax.hx.hx.pathtracer.pathtracer.color.IntersectionInfo;
-import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
 import ax.hx.hx.pathtracer.pathtracer.math.Ray;
 
 /**
- * Created by hx on 3/7/14.
+ * Everything that can intersect, be assigned a material, and
+ * calculate radiance given intersection info should be considered a
+ * Shape.
  */
 public interface Shape
 {
     IntersectionInfo intersection(Ray ray);
-    Influence traceLastHit(int depth, Scene scene, IntersectionInfo info);
+    Radiance traceLastHit(int depth, Scene scene, IntersectionInfo info);
     public void setMaterial(Material material);
 }

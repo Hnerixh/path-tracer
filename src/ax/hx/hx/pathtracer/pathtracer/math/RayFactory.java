@@ -68,17 +68,19 @@ public class RayFactory
             cosTheta = Math.sqrt(1-sin2Theta);
         }
         double r0 = (n1-n2)/(n1+n2);
-        r0 *= r0;
+        r0 = r0 * r0;
         double x = 1 - cosTheta;
         return r0 + (1-r0) * x * x * x * x * x;
     }
 
-    public static Ray newRayFromNormal(Normal normal, Coordinate3 origin){
-        return new Ray(origin, normal);
-    }
+// --Commented out by Inspection START (4/7/14 12:45 PM):
+//    public static Ray newRayFromNormal(Normal normal, Coordinate3 origin){
+//        return new Ray(origin, normal);
+//    }
+// --Commented out by Inspection STOP (4/7/14 12:45 PM)
 
 
-    public static boolean insideUnitSphere(double x, double y, double z){
+    private static boolean insideUnitSphere(double x, double y, double z){
         return (x*x + y*y + z*z <= 1);
     }
 

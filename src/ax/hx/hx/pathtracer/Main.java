@@ -5,7 +5,7 @@ import java.io.File;
 /**
  * This is the simple main file.
  */
-public class Main {
+class Main {
     public static void main(String[] args){
         if (args.length < 2){
             System.out.println("Please supply at least two arguments.");
@@ -20,6 +20,5 @@ public class Main {
         }
 
         renderer.render();
-        return;
     }
 }

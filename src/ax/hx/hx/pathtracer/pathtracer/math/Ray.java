@@ -5,8 +5,8 @@ package ax.hx.hx.pathtracer.pathtracer.math;
  */
 public class Ray
 {
-    private Coordinate3 c;
-    private Vector3 v;
+    private final Coordinate3 c;
+    private final Vector3 v;
 
 
     private boolean insideSomething = false;

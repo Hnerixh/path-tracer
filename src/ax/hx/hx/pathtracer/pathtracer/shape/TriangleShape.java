@@ -8,16 +8,14 @@ import ax.hx.hx.pathtracer.pathtracer.math.Ray;
 import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
 
 /**
- * Created by hx on 3/11/14.
+ * Triangle shape. Initialized with three Coordinate3s.
  */
 public class TriangleShape extends AbstractShape
 {
-    private Normal normal;
 
     private Vector3 c1;
     private Vector3 c2;
     private Vector3 c3;
-    private final double EPSILON = 0.000001;
 
     public TriangleShape(Coordinate3 c1, Coordinate3 c2, Coordinate3 c3){
         this.c1 = new Vector3(c1);
@@ -37,8 +35,6 @@ public class TriangleShape extends AbstractShape
 
 	temp1.normalize();
 	temp2.normalize();
-
-        this.normal = new Normal(temp1.crossProduct(temp2));
     }
 
     private Vector3 negateXY(Vector3 v){
@@ -87,6 +83,7 @@ public class TriangleShape extends AbstractShape
         det = edge1.dotProduct(p);
 
         // Ray parallel to the triangles plane.
+        double EPSILON = 0.000001;
         if (det > -EPSILON && det < EPSILON){
             return null;
         }
@@ -134,7 +131,6 @@ public class TriangleShape extends AbstractShape
 
 
         // Set variables for later.
-        IntersectionInfo info = new IntersectionInfo(ray, normal, intersection);
-        return info;
+        return new IntersectionInfo(ray, normal, intersection);
     }
 }

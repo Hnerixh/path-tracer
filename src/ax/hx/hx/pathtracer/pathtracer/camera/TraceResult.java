@@ -1,12 +1,11 @@
 package ax.hx.hx.pathtracer.pathtracer.camera;
 
-import ax.hx.hx.pathtracer.pathtracer.color.Influence;
-
 /**
- * Created by hx on 3/25/14.
+ * Simple return to the main camera from it's camera workers,
+ * informing of job well done!
  */
-public class TraceResult {
-    public int traces;
+class TraceResult {
+    public final int traces;
     public TraceResult(int traces){
         this.traces = traces;
     }

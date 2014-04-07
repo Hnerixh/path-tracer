@@ -1,13 +1,14 @@
 package ax.hx.hx.pathtracer.pathtracer.material;
 
+import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
-import ax.hx.hx.pathtracer.pathtracer.color.Influence;
 import ax.hx.hx.pathtracer.pathtracer.Material;
 import ax.hx.hx.pathtracer.pathtracer.math.Normal;
 import ax.hx.hx.pathtracer.pathtracer.math.Ray;
 
 /**
- * Created by hx on 3/8/14.
+ * Just a dummy material.
+ * Behaves like a pink lamp.
  */
 public class DummyMaterial implements Material
 {
@@ -15,7 +16,7 @@ public class DummyMaterial implements Material
         return null;
     }
 
-    public Influence calculateInfluence(Ray incoming, Ray outgoing, Normal normal, Influence incomingInfluence){
-        return new Influence(1.0,0.0,1.0);
+    public Radiance calculateInfluence(Ray incoming, Ray outgoing, Normal normal, Radiance incomingRadiance){
+        return new Radiance(1.0,0.0,1.0);
     }
 }

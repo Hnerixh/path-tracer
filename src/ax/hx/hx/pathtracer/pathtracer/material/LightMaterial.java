@@ -2,17 +2,18 @@ package ax.hx.hx.pathtracer.pathtracer.material;
 
 import ax.hx.hx.pathtracer.pathtracer.color.Color;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
-import ax.hx.hx.pathtracer.pathtracer.color.Influence;
+import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 import ax.hx.hx.pathtracer.pathtracer.Material;
 import ax.hx.hx.pathtracer.pathtracer.math.Normal;
 import ax.hx.hx.pathtracer.pathtracer.math.Ray;
 
 /**
- * Created by hx on 3/9/14.
+ * The basic light material used in all emitting materials.
+ * Emitting materials just have one color. They also won't spawn new rays.
  */
 public class LightMaterial implements Material
 {
-    private Color color;
+    private final Color color;
 
     public LightMaterial(Color color){
         this.color = color;
@@ -22,7 +23,10 @@ public class LightMaterial implements Material
         return null;
     }
 
-    public Influence calculateInfluence(Ray incoming, Ray outgoing, Normal normal, Influence incomingInfluence){
-        return new Influence(color.r, color.g, color.b);
+    public Radiance calculateInfluence(Ray incoming,
+                                       Ray outgoing,
+                                       Normal normal,
+                                       Radiance incomingRadiance){
+        return new Radiance(color.r, color.g, color.b);
     }
 }

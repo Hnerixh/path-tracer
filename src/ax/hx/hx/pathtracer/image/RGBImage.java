@@ -21,7 +21,7 @@ public class RGBImage implements Image
     private final int x;
     private final int y;
 
-    private Pixel[] pixels;
+    private final Pixel[] pixels;
 
     private int appendCounter = 0;
     private final int size;

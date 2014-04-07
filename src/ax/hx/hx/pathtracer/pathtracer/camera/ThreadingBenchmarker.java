@@ -17,10 +17,11 @@ import ax.hx.hx.pathtracer.pathtracer.shape.SphereShape;
 import java.io.File;
 
 /**
- * Created by hx on 3/26/14.
+ * Simple bench marking utility for the multithreading.
+ * No arguments, just modify the code and recompile.
  */
-public class ThreadingBenchmarker extends AbstractScene {
-    public ThreadingBenchmarker(){
+class ThreadingBenchmarker extends AbstractScene {
+    private ThreadingBenchmarker(){
         // Create a Cornell box of size 3x3x3
 
         Color white = new Color(.9,.9,.9);
@@ -107,10 +108,13 @@ public class ThreadingBenchmarker extends AbstractScene {
 
     public static void main(String[] args) {
         RGBImage image = new RGBImage(1024, 1024);
-        ImageOutput output = new PPMOutput(image, new File("/home/hx/tmp/FirstCameraTest.ppm"));
+        ImageOutput output = new PPMOutput(image,
+                                 new File("/home/hx/tmp/FirstCameraTest.ppm"));
         image.setOutputModule(output);
         Scene scene = new ThreadingBenchmarker();
 
+        // Will run the test scene once for every i in the list, with
+        // i as the number of workers.
         int targets[] = new int[]{1, 2, 3, 4, 5, 6, 7, 8};
 
         for (int i : targets) {
@@ -123,7 +127,8 @@ public class ThreadingBenchmarker extends AbstractScene {
             double time = (double) (endTime - startTime);
             double renderTime = time / (1000);
             camera.killWorkers();
-            System.out.println("Rendering with " + i + " worker(s) took " + renderTime + " seconds.");
+            System.out.println("Rendering with " + i
+                               + " worker(s) took " + renderTime + " seconds.");
         }
     }
 }

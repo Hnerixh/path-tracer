@@ -6,7 +6,7 @@ package ax.hx.hx.pathtracer.image;
  * combination of coordinates inside the image. Results for trying to
  * get a pixel outside of the image are undefined.
  */
-public interface Image
+interface Image
 {
     int getWidth();
     int getHeight();

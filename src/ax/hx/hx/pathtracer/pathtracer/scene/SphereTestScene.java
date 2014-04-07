@@ -19,7 +19,7 @@ import java.io.File;
 /**
  * Created by hx on 3/7/14.
  */
-public class SphereTestScene extends AbstractScene
+class SphereTestScene extends AbstractScene
 {
     public SphereTestScene(){
 	Coordinate3 origin = new Coordinate3(0,0,3.0);
@@ -42,7 +42,7 @@ public class SphereTestScene extends AbstractScene
             ImageOutput output = new PPMOutput(image, new File("/home/hx/tmp/FirstCameraTest.ppm"));
             image.setOutputModule(output);
             Scene scene = new SphereTestScene();
-            Camera camera = new Camera(scene, 1.0, image, 10);
+            Camera camera = new Camera(scene, 1.0, image, 10, 8);
     	while (true){
             camera.doPasses(100);
             camera.render();

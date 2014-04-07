@@ -5,27 +5,26 @@
    */
   public class Coordinate3
   {
-      public double x,y,z;
+      public final double x;
+      public final double y;
+      public final double z;
       public Coordinate3(double x, double y, double z) {
           this.x = x;
           this.y = y;
           this.z = z;
        }
-       public Coordinate3(Coordinate3 c){
-           this.x = c.x;
-           this.y = c.y;
-           this.z = c.z;
-      }
+// --Commented out by Inspection START (4/7/14 12:44 PM):
+//       public Coordinate3(Coordinate3 c){
+//           this.x = c.x;
+//           this.y = c.y;
+//           this.z = c.z;
+//      }
+// --Commented out by Inspection STOP (4/7/14 12:44 PM)
       public double distance(Coordinate3 co){
           double dx = co.x - x;
           double dy = co.y - y;
           double dz = co.z - z;
           return Math.sqrt(dx*dx + dy*dy + dz*dz);
-      }
-      public void add(Coordinate3 co){
-          this.x += co.x;
-          this.y += co.y;
-          this.z += co.z;
       }
 
       @Override public String toString() {

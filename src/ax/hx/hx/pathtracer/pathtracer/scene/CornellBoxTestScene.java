@@ -14,16 +14,15 @@ import ax.hx.hx.pathtracer.pathtracer.math.Normal;
 import ax.hx.hx.pathtracer.pathtracer.shape.PlaneShape;
 import ax.hx.hx.pathtracer.pathtracer.Scene;
 import ax.hx.hx.pathtracer.pathtracer.shape.SphereShape;
-import ax.hx.hx.pathtracer.pathtracer.shape.TriangleShape;
 
 import java.io.File;
 
 /**
  * Created by hx on 3/10/14.
  */
-public class CornellBoxTestScene extends AbstractScene
+class CornellBoxTestScene extends AbstractScene
 {
-    public CornellBoxTestScene(){
+    private CornellBoxTestScene(){
         // Create a Cornell box of size 3x3x3
 
         Color white = new Color(.9,.9,.9);

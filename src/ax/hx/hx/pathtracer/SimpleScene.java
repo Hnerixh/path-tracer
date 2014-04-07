@@ -3,8 +3,10 @@ package ax.hx.hx.pathtracer;
 import ax.hx.hx.pathtracer.pathtracer.AbstractScene;
 
 /**
- * Created by hx on 4/2/14.
+ * Just an empty constructor for abstract scene.  The reason for this
+ * class existence is the fact that there are several hand coded test
+ * scenes inheriting from AbstractScene.
  */
-public class SimpleScene extends AbstractScene {
+class SimpleScene extends AbstractScene {
     public SimpleScene(){}
 }

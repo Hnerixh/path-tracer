@@ -4,7 +4,6 @@ import ax.hx.hx.pathtracer.image.ImageOutput;
 import ax.hx.hx.pathtracer.image.PPMOutput;
 import ax.hx.hx.pathtracer.image.RGBImage;
 import ax.hx.hx.pathtracer.pathtracer.Material;
-import ax.hx.hx.pathtracer.pathtracer.Scene;
 import ax.hx.hx.pathtracer.pathtracer.Shape;
 import ax.hx.hx.pathtracer.pathtracer.camera.Background;
 import ax.hx.hx.pathtracer.pathtracer.camera.Camera;
@@ -20,12 +19,12 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- * This is a utility class with one public function, parseScene().
+ * This is a class with one public function, parseScene().
  * This function takes a file, parses it, and returns a Renderer.
  *
  * Please reefer to doc/sc_formatspecification.sc for details.
  */
-public class SceneParser {
+class SceneParser {
     private static BufferedReader br;
 
     public static Renderer parseScene(File path, final File outputPath) {
@@ -52,12 +51,7 @@ public class SceneParser {
         } catch (FileNotFoundException e) {
             System.out.println("404: File not found.");
             return null;
-        } catch (IOException e) {
-            System.out.println("Shit, IOException");
-            return null;
-        } finally {
         }
-
         // Is this a scene?
         line = readLine();
         if (line == null) {
@@ -232,12 +226,10 @@ public class SceneParser {
         int cores = Runtime.getRuntime().availableProcessors();
         Camera camera = new Camera(scene, focal_length, image, depth, cores);
 
-        Renderer renderer = new Renderer(camera,
+        return new Renderer(camera,
                                          image,
                                          write_interval,
                                          target_spp);
-
-        return renderer;
     }
 
     private static String readLine() {
@@ -254,8 +246,8 @@ public class SceneParser {
                 return line;
             }
         } catch (IOException e) {
-            System.out.println(e);
-        } finally {}
-            return null;
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -3,18 +3,18 @@ package ax.hx.hx.pathtracer.pathtracer.material;
 
 import ax.hx.hx.pathtracer.pathtracer.Material;
 import ax.hx.hx.pathtracer.pathtracer.color.Color;
-import ax.hx.hx.pathtracer.pathtracer.color.Influence;
+import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
 import ax.hx.hx.pathtracer.pathtracer.math.Normal;
 import ax.hx.hx.pathtracer.pathtracer.math.Ray;
 import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
 
 /**
- * Created by hx on 3/11/14.
+ * A perfectly specular material, also known as a mirror.
  */
 public class MirrorMaterial implements Material
 {
-    private Color color;
+    private final Color color;
     public MirrorMaterial(Color color){
         this.color = color;
     }
@@ -35,8 +35,11 @@ public class MirrorMaterial implements Material
         return new Ray (origin, norm, ray.isInsideSomething());
     }
 
-    public Influence calculateInfluence(Ray incoming, Ray outgoing, Normal normal, Influence incomingInfluence){
-        incomingInfluence.applyColor(color);
-        return incomingInfluence;
+    public Radiance calculateInfluence(Ray incoming,
+                                       Ray outgoing,
+                                       Normal normal,
+                                       Radiance incomingRadiance){
+        incomingRadiance.applyColor(color);
+        return incomingRadiance;
     }
 }

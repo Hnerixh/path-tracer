@@ -5,7 +5,9 @@ package ax.hx.hx.pathtracer.pathtracer.color;
  */
 public class Color
 {
-    public double r,g,b;
+    public final double r;
+    public final double g;
+    public final double b;
     public Color(double r, double g, double b){
 	this.r = r;
 	this.g = g;

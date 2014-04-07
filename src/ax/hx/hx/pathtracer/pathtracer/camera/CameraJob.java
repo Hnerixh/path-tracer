@@ -1,11 +1,9 @@
 package ax.hx.hx.pathtracer.pathtracer.camera;
 
-import ax.hx.hx.pathtracer.pathtracer.math.Ray;
-
 /**
- * Created by hx on 3/25/14.
+ * Description of what interval of pixels a CameraWorker should render.
  */
-public class CameraJob {
+class CameraJob {
     public final int start;
     public final int end;
 

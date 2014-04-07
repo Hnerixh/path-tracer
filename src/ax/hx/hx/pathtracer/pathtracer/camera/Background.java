@@ -1,16 +1,19 @@
 package ax.hx.hx.pathtracer.pathtracer.camera;
 
-import ax.hx.hx.pathtracer.pathtracer.color.Influence;
+import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 import ax.hx.hx.pathtracer.pathtracer.math.Normal;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
 import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by hx on 3/25/14.
+ * This class is used as background when rendering.
+ * The background can be either a solid color
+ * or a image that Java can read using BufferedImage.
+ *
+ * This sucks because Java only reads 8-bit images.
  */
 public class Background {
     private BufferedImage image = null;
@@ -45,9 +48,9 @@ public class Background {
     public Background(){}
 
 
-    public Influence worldInfluence(Normal vec){
+    public Radiance worldInfluence(Normal vec){
         if (image == null){
-            return new Influence(dummyR, dummyG, dummyB);
+            return new Radiance(dummyR, dummyG, dummyB);
         }
 
         double x,y,z;
@@ -72,7 +75,7 @@ public class Background {
         return getInfluenceFromImage(xCoordinate, yCoordinate);
     }
 
-    private Influence getInfluenceFromImage(int x, int y){
+    private Radiance getInfluenceFromImage(int x, int y){
         int pixel = image.getRGB(x,y);
         // So this is why I wrote my own image output module...
         // The normal non-stupid way did not want to play ball with me.
@@ -84,6 +87,6 @@ public class Background {
         b /= RANGE;
         g /= RANGE;
 
-        return new Influence(r,g,b);
+        return new Radiance(r,g,b);
     }
 }

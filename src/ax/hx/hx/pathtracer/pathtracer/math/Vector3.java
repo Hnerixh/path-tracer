@@ -8,8 +8,6 @@ public class Vector3
 {
     private double x, y, z;
 
-    private boolean normalized;
-
     public Vector3(double x, double y, double z){
         this.x = x;
         this.y = y;
@@ -32,7 +30,6 @@ public class Vector3
         x /= length;
         y /= length;
         z /= length;
-        normalized = true;
     }
 
 
@@ -46,12 +43,6 @@ public class Vector3
         x -= vec.getX();
         y -= vec.getY();
         z -= vec.getZ();
-    }
-
-    public void product(Vector3 vec){
-        x *= vec.getX();
-        y *= vec.getY();
-        z *= vec.getZ();
     }
 
     public double dotProduct(Vector3 vec){
@@ -94,10 +85,6 @@ public class Vector3
         z = -z;
     }
 
-    public boolean isNormalized() {
-        return normalized;
-    }
-
     /**
      * @return the x
      */
@@ -135,11 +122,10 @@ public class Vector3
 
          final Vector3 vector3 = (Vector3) o;
 
-         if (Double.compare(vector3.x, x) != 0) return false;
-         if (Double.compare(vector3.y, y) != 0) return false;
-         if (Double.compare(vector3.z, z) != 0) return false;
+         return Double.compare(vector3.x, x) == 0
+                && Double.compare(vector3.y, y) == 0
+                && Double.compare(vector3.z, z) == 0;
 
-         return true;
      }
 
      @Override

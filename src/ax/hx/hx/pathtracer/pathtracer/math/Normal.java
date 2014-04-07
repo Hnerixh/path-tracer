@@ -1,7 +1,8 @@
 package ax.hx.hx.pathtracer.pathtracer.math;
 
 /**
- * Created by hx on 3/7/14.
+ * Subclass of Vector3, where the vector is guaranteed to be
+ * normalized
  */
 public class Normal extends Vector3
 {

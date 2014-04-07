@@ -1,30 +1,31 @@
 package ax.hx.hx.pathtracer.pathtracer.camera;
 
 import ax.hx.hx.pathtracer.pathtracer.Scene;
-import ax.hx.hx.pathtracer.pathtracer.color.Influence;
+import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
 import ax.hx.hx.pathtracer.pathtracer.math.Rand;
 import ax.hx.hx.pathtracer.pathtracer.math.Ray;
 import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
 
-import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * Created by hx on 3/25/14.
+ * A CameraWorker does the actual rendering, but gets RenderJobs from Camera.
+ * The rendering jobs are recieved from a BlockingQueue.
+ * The result of a finished job are sent down another BlockingQueue.
+ *
+ * This class also writes to the main grid of total radiance
  */
-public class CameraWorker implements Runnable {
-    private double focalLength;
-    private BlockingQueue<CameraJob> jobQueue;
-    private BlockingQueue<TraceResult> resultQueue;
-    private int depth;
-    private Scene scene;
-    private CameraWorkerInfo killswitch;
-    private Random rnd;
-    private int width;
-    private int heigth;
-    private int size;
-    private Influence[] influences;
+class CameraWorker implements Runnable {
+    private final double focalLength;
+    private final BlockingQueue<CameraJob> jobQueue;
+    private final BlockingQueue<TraceResult> resultQueue;
+    private final int depth;
+    private final Scene scene;
+    private final CameraWorkerInfo killswitch;
+    private final int width;
+    private final int heigth;
+    private final Radiance[] radiances;
 
     CameraWorker(BlockingQueue<CameraJob> jobQueue,
                  BlockingQueue<TraceResult> resultQueue,
@@ -34,7 +35,7 @@ public class CameraWorker implements Runnable {
                  int width,
                  int heigth,
                  double focalLength,
-                 Influence[] influences){
+                 Radiance[] radiances){
 
         this.jobQueue = jobQueue;
         this.resultQueue = resultQueue;
@@ -43,16 +44,13 @@ public class CameraWorker implements Runnable {
         this.killswitch = killswitch;
         this.width = width;
         this.heigth = heigth;
-        this.size = width*heigth;
         this.focalLength = focalLength;
-        this.influences = influences;
-
-        this.rnd = new Random();
+        this.radiances = radiances;
     }
 
     public void run() {
         CameraJob job;
-        Influence influence;
+        Radiance radiance;
         while (true) {
             if (killswitch.shouldDie()){
                 return;
@@ -61,12 +59,11 @@ public class CameraWorker implements Runnable {
                 job = jobQueue.take();
                 int traces = 0;
                 for (int i = job.start; i < job.end; i++) {
-                    influence = scene.pathtrace(rayForPixel(i), depth);
-                    influences[i].addInfluence(influence);
+                    radiance = scene.pathtrace(rayForPixel(i), depth);
+                    radiances[i].addInfluence(radiance);
                     traces++;
                 }
                 resultQueue.put(new TraceResult(traces));
-                traces = 0;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

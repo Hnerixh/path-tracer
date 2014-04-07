@@ -1,7 +1,7 @@
 package ax.hx.hx.pathtracer.pathtracer;
 
 import ax.hx.hx.pathtracer.pathtracer.camera.Background;
-import ax.hx.hx.pathtracer.pathtracer.color.Influence;
+import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 import ax.hx.hx.pathtracer.pathtracer.color.IntersectionInfo;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
 import ax.hx.hx.pathtracer.pathtracer.math.Normal;
@@ -11,21 +11,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by hx on 3/7/14.
+ * This class implements logic for looping over the shapes in the scene,
+ * as well as doing the actuall path tracing recursively.
+ *
+ * Could be improved by replacing recursion with a normal loop,
+ * but IMHO that would be trading speed for complexity.
  */
 public abstract class AbstractScene implements Scene
 {
     private List<Shape> shapes = new ArrayList<Shape>();
     private Background background = new Background();
 
-    public Influence pathtrace(Ray ray, int depth){
+    public Radiance pathtrace(Ray ray, int depth){
 	if (depth <= 0) {
-	    return new Influence(); // This had no influence, so just return nothing.
+	    return new Radiance(); // This had no influence, so just return nothing.
 	}
         Shape hit = null;
         double nearestHit = -1;
 
-        Coordinate3 hitCoord = null;
         IntersectionInfo info = null;
 
         Coordinate3 rayOrigin = ray.getOrigin();
@@ -41,7 +44,6 @@ public abstract class AbstractScene implements Scene
 		//System.out.println("passed");
                 hit = shape;
                 nearestHit = intersection.distance(rayOrigin);
-                hitCoord = intersection;
                 info = intersectionInfo;
             }
         }
@@ -57,12 +59,12 @@ public abstract class AbstractScene implements Scene
 
     }
 
-    Influence worldInfluence(Ray ray){
+    Radiance worldInfluence(Ray ray){
         Normal normal = new Normal(ray.getVector());
         return background.worldInfluence(normal);
     }
 
-    public List<Shape> getShapes() {
+    protected List<Shape> getShapes() {
 	return shapes;
     }
 

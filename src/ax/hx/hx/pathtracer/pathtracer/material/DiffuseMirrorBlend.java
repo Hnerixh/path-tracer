@@ -2,17 +2,19 @@ package ax.hx.hx.pathtracer.pathtracer.material;
 
 import ax.hx.hx.pathtracer.pathtracer.Material;
 import ax.hx.hx.pathtracer.pathtracer.color.Color;
-import ax.hx.hx.pathtracer.pathtracer.color.Influence;
+import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 import ax.hx.hx.pathtracer.pathtracer.math.*;
 
 /**
- * Created by hx on 3/25/14.
+ * A material which decides between diffuse and perfect specular
+ * reflection. This is done using Russian Roulette and the reflectance
+ * of the surface according to the Schlick approximation.
  */
 public class DiffuseMirrorBlend implements Material {
-    private Color color;
-    private double ratio;
-    private Material diffuse;
-    private Material mirror;
+    private final Color color;
+    private final double ratio;
+    private final Material diffuse;
+    private final Material mirror;
 
     public DiffuseMirrorBlend(Color color, double ratio){
         this.color = color;
@@ -30,8 +32,8 @@ public class DiffuseMirrorBlend implements Material {
         }
     }
 
-    public Influence calculateInfluence(Ray incoming, Ray outgoing, Normal normal, Influence incomingInfluence){
-        incomingInfluence.applyColor(color);
-        return incomingInfluence;
+    public Radiance calculateInfluence(Ray incoming, Ray outgoing, Normal normal, Radiance incomingRadiance){
+        incomingRadiance.applyColor(color);
+        return incomingRadiance;
     }
 }

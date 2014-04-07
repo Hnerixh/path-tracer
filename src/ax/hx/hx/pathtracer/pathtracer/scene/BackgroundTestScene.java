@@ -17,8 +17,8 @@ import java.io.File;
 /**
  * Created by hx on 3/25/14.
  */
-public class BackgroundTestScene extends AbstractScene {
-    public BackgroundTestScene(){
+class BackgroundTestScene extends AbstractScene {
+    private BackgroundTestScene(){
 
         Background background = new Background(new File("/home/hx/tmp/warehouse.jpg"));
         this.setBackground(background);

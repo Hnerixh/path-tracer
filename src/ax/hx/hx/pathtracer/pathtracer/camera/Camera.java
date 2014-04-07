@@ -1,12 +1,11 @@
 package ax.hx.hx.pathtracer.pathtracer.camera;
 
-import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import ax.hx.hx.pathtracer.image.RGBImage;
 import ax.hx.hx.pathtracer.pathtracer.Scene;
-import ax.hx.hx.pathtracer.pathtracer.color.Influence;
+import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 
 
 /**
@@ -14,27 +13,26 @@ import ax.hx.hx.pathtracer.pathtracer.color.Influence;
   */
  public class Camera
  {
-     Scene scene;
-     int width;
-     int heigth;
-     int size;
-     double focalLength;
-     Influence[] influenses;
-     RGBImage image;
-     int renderDepth;
-     Random rnd;
-     long totalTraces = 0; // Fun overflow after 1.5 hours if it happens to be an int.
+     private Scene scene;
+     private int width;
+     private int heigth;
+     private int size;
+     private double focalLength;
+     private Radiance[] influenses;
+     private RGBImage image;
+     private int renderDepth;
+     private long totalTraces = 0; // Fun overflow after 1.5 hours if it happens to be an int.
      private boolean hasWorkers = false;
 
-     CameraWorkerInfo killswitch = new CameraWorkerInfo();
-     int workers = 2;
+     private final CameraWorkerInfo killswitch = new CameraWorkerInfo();
+     private int workers = 2;
 
      private BlockingQueue<CameraJob> jobQueue;
      private BlockingQueue<TraceResult> resultQueue;
 
-     public Camera(Scene scene, double focalLength, RGBImage image, int renderDepth){
-         init(scene, focalLength, image, renderDepth, workers);
-     }
+ //    public Camera(Scene scene, double focalLength, RGBImage image, int renderDepth){
+ //        init(scene, focalLength, image, renderDepth, workers);
+ //    }
 
      public Camera(Scene scene, double focalLength, RGBImage image, int renderDepth, int workers){
          init(scene, focalLength, image, renderDepth, workers);
@@ -47,16 +45,15 @@ import ax.hx.hx.pathtracer.pathtracer.color.Influence;
          this.size = width * heigth;
          this.focalLength = focalLength;
          this.image = image;
-         this.rnd = new Random();
          this.renderDepth = renderDepth;
          this.workers = workers;
 
          jobQueue = new ArrayBlockingQueue<CameraJob>(size);
          resultQueue = new ArrayBlockingQueue<TraceResult>(size);
 
-         influenses = new Influence[size];
+         influenses = new Radiance[size];
          for (int i = 0; i < size; i++) {
-             influenses[i] = new Influence();
+             influenses[i] = new Radiance();
          }
 
          createWorkers();
@@ -108,7 +105,6 @@ import ax.hx.hx.pathtracer.pathtracer.color.Influence;
 
 
      private void waitForWorkers(int passes){
-         TraceResult res;
          try {
              for (int i = 0; i < workers*passes; i++) {
                 totalTraces += resultQueue.take().traces;
