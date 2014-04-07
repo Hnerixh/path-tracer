@@ -61,9 +61,12 @@ public class SceneParser {
         // Is this a scene?
         line = readLine();
         if (line == null) {
+            System.out.println("Empty file?");
             return null;
+
         }
         if (!line.equals("scene")) {
+            System.out.println("Not a scene description file, magic constant: " + line + " is not 'scene'.");
             return null;
         }
 
@@ -186,7 +189,7 @@ public class SceneParser {
                 continue;
             }
 
-            if (line.startsWith("sphere")){
+            if (line.startsWith("plane")){
                 line_parts = line.split(" ");
                 double x = Double.parseDouble(line_parts[2]);
                 double y = Double.parseDouble(line_parts[3]);
@@ -252,8 +255,7 @@ public class SceneParser {
             }
         } catch (IOException e) {
             System.out.println(e);
-        } finally {
+        } finally {}
             return null;
-        }
     }
 }

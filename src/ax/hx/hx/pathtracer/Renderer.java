@@ -22,14 +22,15 @@ public class Renderer {
 
     public void render(){
         long renderStart = System.currentTimeMillis();
-        do {
+        // TODO Fixa det här för target = 0
+        while (targetSamples > 0) {
             camera.doPasses(writeInterval);
             camera.render();
             image.output();
             System.out.println("Wrote to file");
             System.out.println(currentRenderTime(renderStart));
             targetSamples -= writeInterval;
-        } while(targetSamples > 0);
+        }
         System.out.println("Done!");
     }
     private String currentRenderTime(long renderStart){
