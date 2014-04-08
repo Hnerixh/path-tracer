@@ -10,6 +10,7 @@
   */
  public abstract class AbstractShape implements Shape
  {
+     // TODO Kan man ersätta den här med new Radiance();?
      private static final Radiance NULL_RADIANCE = new Radiance(0.0,0.0,0.0);
 
          private Material material = new DummyMaterial();

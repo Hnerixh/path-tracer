@@ -21,10 +21,11 @@ public abstract class AbstractScene implements Scene
 {
     private List<Shape> shapes = new ArrayList<Shape>();
     private Background background = new Background();
+    private final Radiance NULL_RADIANCE = new Radiance();
 
     public Radiance pathtrace(Ray ray, int depth){
 	if (depth <= 0) {
-	    return new Radiance(); // This had no influence, so just return nothing.
+	    return NULL_RADIANCE; // This had no influence, so just return nothing.
 	}
         Shape hit = null;
         double nearestHit = -1;
@@ -32,6 +33,7 @@ public abstract class AbstractScene implements Scene
         IntersectionInfo info = null;
 
         Coordinate3 rayOrigin = ray.getOrigin();
+
         for (Shape shape: shapes) {
             IntersectionInfo intersectionInfo = shape.intersection(ray);
 
