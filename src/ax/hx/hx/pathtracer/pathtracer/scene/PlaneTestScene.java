@@ -75,7 +75,7 @@ class PlaneTestScene extends AbstractScene
             ImageOutput output = new PPMOutput(image, new File("/home/hx/tmp/FirstCameraTest.ppm"));
             image.setOutputModule(output);
             Scene scene = new PlaneTestScene();
-            Camera camera = new Camera(scene, 1.0, image, 10, 8);
+            Camera camera = new Camera(scene, 1.0, image, 10, 1.0, 8);
             // while (true){
             camera.doPasses(10);
             camera.render();

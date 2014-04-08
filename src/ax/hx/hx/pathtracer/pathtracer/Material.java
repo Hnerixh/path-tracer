@@ -28,8 +28,8 @@ public interface Material
     // Current materials may not use every argument,
     // but they are left here for the future,
     // in case someone would like to implement a more complex BRDF.
-    public Radiance calculateInfluence(Ray incoming,
-                                       Ray outgoing,
-                                       Normal normal,
-                                       Radiance incomingRadiance);
+    public void applyToRadiance(Ray incoming,
+                                Ray outgoing,
+                                Normal normal,
+                                Radiance incomingRadiance);
 }

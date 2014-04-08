@@ -118,11 +118,11 @@ class CornellBoxTestScene extends AbstractScene
     }
 
     public static void main(String[] args){
-        RGBImage image = new RGBImage(2048, 2048);
+        RGBImage image = new RGBImage(1024,1024);
         ImageOutput output = new PPMOutput(image, new File("/home/hx/tmp/FirstCameraTest.ppm"));
         image.setOutputModule(output);
         Scene scene = new CornellBoxTestScene();
-        Camera camera = new Camera(scene, 1.0, image, 16, 8);
+        Camera camera = new Camera(scene, 1.0, image, 16, 1.0, 8);
         while (true){
             camera.doPasses(8);
             camera.render();

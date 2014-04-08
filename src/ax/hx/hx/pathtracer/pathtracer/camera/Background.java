@@ -1,5 +1,6 @@
 package ax.hx.hx.pathtracer.pathtracer.camera;
 
+import ax.hx.hx.pathtracer.pathtracer.color.Color;
 import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 import ax.hx.hx.pathtracer.pathtracer.math.Normal;
 
@@ -20,9 +21,7 @@ public class Background {
     private int width;
     private int heigth;
 
-    private double dummyR = 1.0;
-    private double dummyG = 0.2;
-    private double dummyB = 1.0;
+    private Color color;
 
 
     // According to documentation a ColorModel will always give values
@@ -40,17 +39,15 @@ public class Background {
     }
 
     public Background(double r, double g, double b){
-        dummyB = b;
-        dummyG = g;
-        dummyR = r;
+        color = new Color(r,g,b);
     }
 
     public Background(){}
 
 
-    public Radiance worldInfluence(Normal vec){
+    public Color worldColor(Normal vec){
         if (image == null){
-            return new Radiance(dummyR, dummyG, dummyB);
+            return color;
         }
 
         double x,y,z;
@@ -72,10 +69,10 @@ public class Background {
         xCoordinate %= width; // And now we have the location of the
                               // pixel we want.
         yCoordinate %= heigth;
-        return getInfluenceFromImage(xCoordinate, yCoordinate);
+        return getColorFromImage(xCoordinate, yCoordinate);
     }
 
-    private Radiance getInfluenceFromImage(int x, int y){
+    private Color getColorFromImage(int x, int y){
         int pixel = image.getRGB(x,y);
         // So this is why I wrote my own image output module...
         // The normal non-stupid way did not want to play ball with me.
@@ -87,6 +84,6 @@ public class Background {
         b /= RANGE;
         g /= RANGE;
 
-        return new Radiance(r,g,b);
+        return new Color(r,g,b);
     }
 }

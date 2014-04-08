@@ -12,6 +12,6 @@ import ax.hx.hx.pathtracer.pathtracer.math.Ray;
 public interface Shape
 {
     IntersectionInfo intersection(Ray ray);
-    Radiance traceLastHit(int depth, Scene scene, IntersectionInfo info);
     public void setMaterial(Material material);
+    public Material getMaterial();
 }

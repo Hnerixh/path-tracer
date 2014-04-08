@@ -22,7 +22,9 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
      private RGBImage image;
      private int renderDepth;
      private long totalTraces = 0; // Fun overflow after 1.5 hours if it happens to be an int.
+     private long totalSuccesfulTraces = 0;
      private boolean hasWorkers = false;
+     private double RRratio;
 
      private final CameraWorkerInfo killswitch = new CameraWorkerInfo();
      private int workers = 2;
@@ -30,15 +32,7 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
      private BlockingQueue<CameraJob> jobQueue;
      private BlockingQueue<TraceResult> resultQueue;
 
- //    public Camera(Scene scene, double focalLength, RGBImage image, int renderDepth){
- //        init(scene, focalLength, image, renderDepth, workers);
- //    }
-
-     public Camera(Scene scene, double focalLength, RGBImage image, int renderDepth, int workers){
-         init(scene, focalLength, image, renderDepth, workers);
-     }
-
-     private void init(Scene scene, double focalLength, RGBImage image, int renderDepth, int workers){
+     public Camera(Scene scene, double focalLength, RGBImage image, int renderDepth, double RRratio, int workers){
          this.scene = scene;
          this.width = image.getWidth();
          this.heigth = image.getHeight();
@@ -47,6 +41,7 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
          this.image = image;
          this.renderDepth = renderDepth;
          this.workers = workers;
+         this.RRratio = RRratio;
 
          jobQueue = new ArrayBlockingQueue<CameraJob>(size);
          resultQueue = new ArrayBlockingQueue<TraceResult>(size);
@@ -67,7 +62,7 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
          CameraWorker worker;
          Thread workerThread;
          for (int i = 0; i < workers; i++) {
-             worker = new CameraWorker(jobQueue, resultQueue, renderDepth, scene, killswitch, width, heigth, focalLength, influenses);
+             worker = new CameraWorker(jobQueue, resultQueue, renderDepth, RRratio, scene, killswitch, width, heigth, focalLength, influenses);
              workerThread = new Thread(worker);
              workerThread.start();
              hasWorkers = true;
@@ -107,8 +102,16 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
      private void waitForWorkers(int passes){
          try {
              for (int i = 0; i < workers*passes; i++) {
-                totalTraces += resultQueue.take().traces;
-                System.out.println(((double) totalTraces / (double) size) + " samples per pixel");
+                TraceResult res = resultQueue.take();
+                totalSuccesfulTraces += res.succesfulTraces;
+                totalTraces += res.traces;
+                double hitratio = (100.0 * (double) totalSuccesfulTraces / (double) totalTraces);
+                double spp = ((double) totalTraces / (double) size); // Traced samples per pixel
+                double real_spp = spp * hitratio / 100.0; // Actual emitter hits per pixel
+                System.out.println("Traces per pixel: " + spp);
+                System.out.println("Samples per pixel: " + real_spp);
+                System.out.println("Hit probability: " + hitratio + "%");
+                System.out.println("-------------");
              }
          }
          catch (InterruptedException e) { System.out.println("Sorry, the camera got interrupted");}
@@ -116,7 +119,7 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 
      public void doPasses(int passes){
           if(!hasWorkers){
-              System.out.println("Killing of workers should only be used for benchmarking purposes. You just did something terribly wrong.");
+              System.out.println("Killing workers should only be used for benchmarking purposes. You just did something terribly wrong.");
           }
              queuePasses(passes);
              waitForWorkers(passes);

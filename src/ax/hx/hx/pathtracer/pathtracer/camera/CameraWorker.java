@@ -26,10 +26,12 @@ class CameraWorker implements Runnable {
     private final int width;
     private final int heigth;
     private final Radiance[] radiances;
+    private final double RRratio;
 
     CameraWorker(BlockingQueue<CameraJob> jobQueue,
                  BlockingQueue<TraceResult> resultQueue,
                  int traceDepth,
+                 double RRratio,
                  Scene scene,
                  CameraWorkerInfo killswitch,
                  int width,
@@ -46,11 +48,12 @@ class CameraWorker implements Runnable {
         this.heigth = heigth;
         this.focalLength = focalLength;
         this.radiances = radiances;
+        this.RRratio = RRratio;
     }
 
     public void run() {
         CameraJob job;
-        Radiance radiance;
+        Radiance radiance = new Radiance(1.0, 1.0, 1.0);
         while (true) {
             if (killswitch.shouldDie()){
                 return;
@@ -58,12 +61,17 @@ class CameraWorker implements Runnable {
             try {
                 job = jobQueue.take();
                 int traces = 0;
+                int succesfulTraces = 0;
                 for (int i = job.start; i < job.end; i++) {
-                    radiance = scene.pathtrace(rayForPixel(i), depth);
-                    radiances[i].addInfluence(radiance);
                     traces++;
+                    radiance = scene.pathtrace(rayForPixel(i), depth, RRratio, radiance);
+                    if (radiance.discarded()){
+                        continue;
+                    }
+                    radiances[i].addInfluence(radiance);
+                    succesfulTraces++;
                 }
-                resultQueue.put(new TraceResult(traces));
+                resultQueue.put(new TraceResult(traces, succesfulTraces));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

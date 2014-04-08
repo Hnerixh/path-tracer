@@ -35,14 +35,10 @@ public class MirrorMaterial implements Material
         return new Ray (origin, norm, ray.isInsideSomething());
     }
 
-    public Radiance calculateInfluence(Ray incoming,
-                                       Ray outgoing,
-                                       Normal normal,
-                                       Radiance incomingRadiance){
-        if (incomingRadiance == null){
-            return null;
-        }
+    public void applyToRadiance(Ray incoming,
+                                    Ray outgoing,
+                                    Normal normal,
+                                    Radiance incomingRadiance){
         incomingRadiance.applyColor(color);
-        return incomingRadiance;
     }
 }

@@ -29,10 +29,7 @@ public class DiffuseMaterial implements Material
 	// return RayFactory.newRayFromNormal(normal, origin);
     }
 
-    public Radiance calculateInfluence(Ray incoming, Ray outgoing, Normal normal, Radiance incomingRadiance){
-        if (incomingRadiance == null){
-            return null;
-        }
+    public void applyToRadiance(Ray incoming, Ray outgoing, Normal normal, Radiance incomingRadiance){
         // We already send out rays distributed by Lambert's cosine
         // law, so just apply our color to incomingRadiance and pass
         // along.
@@ -41,6 +38,5 @@ public class DiffuseMaterial implements Material
 	// incomingRadiance.factor(normal.dotProduct(outgoing.getVector()));
 
         incomingRadiance.applyColor(color);
-        return incomingRadiance;
     }
 }

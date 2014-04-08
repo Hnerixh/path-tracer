@@ -8,5 +8,5 @@ import ax.hx.hx.pathtracer.pathtracer.math.Ray;
  */
 public interface Scene
 {
-    public Radiance pathtrace(Ray ray, int depth);
+    public Radiance pathtrace(Ray ray, int depth, double RRratio, Radiance radiance);
 }

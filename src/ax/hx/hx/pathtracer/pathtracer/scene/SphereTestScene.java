@@ -42,7 +42,7 @@ class SphereTestScene extends AbstractScene
             ImageOutput output = new PPMOutput(image, new File("/home/hx/tmp/FirstCameraTest.ppm"));
             image.setOutputModule(output);
             Scene scene = new SphereTestScene();
-            Camera camera = new Camera(scene, 1.0, image, 10, 8);
+            Camera camera = new Camera(scene, 1.0, image, 10, 1.0, 8);
     	while (true){
             camera.doPasses(100);
             camera.render();

@@ -48,7 +48,7 @@ class BackgroundTestScene extends AbstractScene {
         ImageOutput output = new PPMOutput(image, new File("/home/hx/tmp/FirstCameraTest.ppm"));
         image.setOutputModule(output);
         Scene scene = new BackgroundTestScene();
-        Camera camera = new Camera(scene, 1.0, image, 3, 8);
+        Camera camera = new Camera(scene, 1.0, image, 3, 1.0, 8);
         while (true){
             camera.doPasses(4);
             camera.render();

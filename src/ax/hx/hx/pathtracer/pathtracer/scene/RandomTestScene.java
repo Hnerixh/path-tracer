@@ -9,7 +9,7 @@ import ax.hx.hx.pathtracer.pathtracer.Scene;
  */
 public class RandomTestScene implements Scene
 {
-    public Radiance pathtrace(Ray ray, int depth){
+    public Radiance pathtrace(Ray ray, int depth, double arst, Radiance arsttas){
 	return new Radiance();
     }
 }

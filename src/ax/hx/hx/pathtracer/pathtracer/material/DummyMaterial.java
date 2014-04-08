@@ -1,5 +1,6 @@
 package ax.hx.hx.pathtracer.pathtracer.material;
 
+import ax.hx.hx.pathtracer.pathtracer.color.Color;
 import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
 import ax.hx.hx.pathtracer.pathtracer.Material;
@@ -16,10 +17,7 @@ public class DummyMaterial implements Material
         return null;
     }
 
-    public Radiance calculateInfluence(Ray incoming, Ray outgoing, Normal normal, Radiance incomingRadiance){
-        if (incomingRadiance == null){
-            return null;
-        }
-        return new Radiance(1.0,0.0,1.0);
+    public void applyToRadiance(Ray incoming, Ray outgoing, Normal normal, Radiance incomingRadiance){
+        incomingRadiance.applyColor(new Color(1.0, 0.0, 1.0));
     }
 }

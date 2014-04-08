@@ -30,6 +30,7 @@ class SceneParser {
     public static Renderer parseScene(File path, final File outputPath) {
         int writeInterval;
         int targetSamples;
+
         String[] line_parts;
         ArrayList<Shape> shapes = new ArrayList<Shape>();
         ArrayList<Material> materials = new ArrayList<Material>();
@@ -40,6 +41,7 @@ class SceneParser {
         int xSize = 1024;
         int ySize = 1024;
 
+        double russian_roulette_death_probability = 0.0;
         int depth = 3;
         int target_spp = 1;
         int write_interval = 1;
@@ -111,6 +113,12 @@ class SceneParser {
                 double g = Double.parseDouble(line_parts[2]);
                 double b = Double.parseDouble(line_parts[3]);
                 background = new Background(r, g, b);
+                continue;
+            }
+
+            if (line.startsWith("rrprob")) {
+                line_parts = line.split(" ");
+                russian_roulette_death_probability = Double.parseDouble(line_parts[1]);
                 continue;
             }
             System.out.println("Unknown option: " + line);
@@ -224,7 +232,11 @@ class SceneParser {
         image.setOutputModule(imageOutput);
 
         int cores = Runtime.getRuntime().availableProcessors();
-        Camera camera = new Camera(scene, focal_length, image, depth, cores);
+        Camera camera = new Camera(scene, focal_length,
+                                image,
+                                depth,
+                                russian_roulette_death_probability,
+                                cores);
 
         return new Renderer(camera,
                                          image,

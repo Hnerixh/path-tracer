@@ -34,6 +34,19 @@ public class Radiance
 	    null_influence = true;
     }
 
+    public void discard(){
+        this.null_influence = true;
+    }
+
+    // Reset to the equivalent of a new Radiance object, with the supplied colors
+    public void reset(double r, double g, double b){
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this. null_influence = false;
+        this.influencedBy = 0;
+    }
+
     public RGBPixel getPixel(){
 	int ri = (int) (r * 255.0);
 	int gi = (int) (g * 255.0);
@@ -41,12 +54,15 @@ public class Radiance
 	return new RGBPixel(ri, gi, bi);
     }
 
-    public void addInfluence(Radiance i){
-	// Calculates the avarage of all hits.
-    if(i == null){
-        return;
+    public boolean discarded(){
+        return null_influence;
     }
 
+    public void addInfluence(Radiance i){
+	// Calculates the avarage of all hits.
+    if(i.null_influence){
+        return;
+    }
     if (this.null_influence){
         r = i.getR();
         g = i.getG();

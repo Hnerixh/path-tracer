@@ -118,7 +118,7 @@ class ThreadingBenchmarker extends AbstractScene {
         int targets[] = new int[]{1, 2, 3, 4, 5, 6, 7, 8};
 
         for (int i : targets) {
-            Camera camera = new Camera(scene, 1.0, image, 16, i);
+            Camera camera = new Camera(scene, 1.0, image, 16, 1.0, i);
             long startTime = System.currentTimeMillis();
             camera.doPasses(5);
             camera.render();

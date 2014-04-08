@@ -23,13 +23,10 @@ public class LightMaterial implements Material
         return null;
     }
 
-    public Radiance calculateInfluence(Ray incoming,
-                                       Ray outgoing,
-                                       Normal normal,
-                                       Radiance incomingRadiance){
-        if (incomingRadiance == null){
-            return null;
-        }
-        return new Radiance(color.r, color.g, color.b);
+    public void applyToRadiance(Ray incoming,
+                                    Ray outgoing,
+                                    Normal normal,
+                                    Radiance incomingRadiance){
+        incomingRadiance.applyColor(color);
     }
 }
