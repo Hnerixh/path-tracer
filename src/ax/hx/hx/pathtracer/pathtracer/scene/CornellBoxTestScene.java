@@ -94,7 +94,7 @@ class CornellBoxTestScene extends AbstractScene
         // Add a sphere
         origin = new Coordinate3(-.5, 1, 4.0);
         shape = new SphereShape(origin, 0.5);
-        material = new DiffuseMaterial(white);
+        material = new RefractiveMaterial(white, 1.4);
         shape.setMaterial(material);
         getShapes().add(shape);
 
