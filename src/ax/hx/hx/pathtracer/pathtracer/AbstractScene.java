@@ -21,11 +21,10 @@ public abstract class AbstractScene implements Scene
 {
     private List<Shape> shapes = new ArrayList<Shape>();
     private Background background = new Background();
-    private final Radiance NULL_RADIANCE = new Radiance();
 
     public Radiance pathtrace(Ray ray, int depth){
 	if (depth <= 0) {
-	    return NULL_RADIANCE; // This had no influence, so just return nothing.
+	    return null; // This had no influence, so just return nothing.
 	}
         Shape hit = null;
         double nearestHit = -1;

@@ -39,6 +39,9 @@ public class MirrorMaterial implements Material
                                        Ray outgoing,
                                        Normal normal,
                                        Radiance incomingRadiance){
+        if (incomingRadiance == null){
+            return null;
+        }
         incomingRadiance.applyColor(color);
         return incomingRadiance;
     }

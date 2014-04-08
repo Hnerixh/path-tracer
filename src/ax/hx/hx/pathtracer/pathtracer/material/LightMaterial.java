@@ -27,6 +27,9 @@ public class LightMaterial implements Material
                                        Ray outgoing,
                                        Normal normal,
                                        Radiance incomingRadiance){
+        if (incomingRadiance == null){
+            return null;
+        }
         return new Radiance(color.r, color.g, color.b);
     }
 }

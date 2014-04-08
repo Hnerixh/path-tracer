@@ -30,6 +30,9 @@ public class DiffuseMaterial implements Material
     }
 
     public Radiance calculateInfluence(Ray incoming, Ray outgoing, Normal normal, Radiance incomingRadiance){
+        if (incomingRadiance == null){
+            return null;
+        }
         // We already send out rays distributed by Lambert's cosine
         // law, so just apply our color to incomingRadiance and pass
         // along.

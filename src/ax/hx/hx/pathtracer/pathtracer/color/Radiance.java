@@ -43,7 +43,7 @@ public class Radiance
 
     public void addInfluence(Radiance i){
 	// Calculates the avarage of all hits.
-    if(i.null_influence){
+    if(i == null){
         return;
     }
 

@@ -33,6 +33,9 @@ public class DiffuseMirrorBlend implements Material {
     }
 
     public Radiance calculateInfluence(Ray incoming, Ray outgoing, Normal normal, Radiance incomingRadiance){
+        if (incomingRadiance == null){
+            return null;
+        }
         incomingRadiance.applyColor(color);
         return incomingRadiance;
     }

@@ -17,6 +17,9 @@ public class DummyMaterial implements Material
     }
 
     public Radiance calculateInfluence(Ray incoming, Ray outgoing, Normal normal, Radiance incomingRadiance){
+        if (incomingRadiance == null){
+            return null;
+        }
         return new Radiance(1.0,0.0,1.0);
     }
 }

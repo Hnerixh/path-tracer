@@ -10,7 +10,7 @@
   */
  public abstract class AbstractShape implements Shape
  {
-     // TODO Kan man ersätta den här med new Radiance();?
+     // TODO Kan man ersätta den här med null;?
      private static final Radiance NULL_RADIANCE = new Radiance(0.0,0.0,0.0);
 
          private Material material = new DummyMaterial();
@@ -36,7 +36,7 @@
          // 2. Get some incomingRadiance
          Radiance incomingRadiance;
          if (newRay == null){
-             incomingRadiance = NULL_RADIANCE;
+             incomingRadiance = null;
          }
 
 
