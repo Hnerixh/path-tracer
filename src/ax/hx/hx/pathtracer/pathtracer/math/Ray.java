@@ -5,19 +5,19 @@ package ax.hx.hx.pathtracer.pathtracer.math;
  */
 public class Ray
 {
-    private final Coordinate3 c;
+    private final Coordinate3 coordinate;
     private final Vector3 v;
 
 
     private boolean insideSomething = false;
-    public Ray(Coordinate3 c, Vector3 v) {
-        this.c = c;
+    public Ray(Coordinate3 coordinate, Vector3 v) {
+        this.coordinate = coordinate;
         v.normalize();
         this.v = v;
     }
 
-    public Ray(Coordinate3 c, Vector3 v, boolean insideSomething) {
-        this.c = c;
+    public Ray(Coordinate3 coordinate, Vector3 v, boolean insideSomething) {
+        this.coordinate = coordinate;
         v.normalize();
         this.v = v;
 	this.insideSomething = insideSomething;
@@ -30,13 +30,13 @@ public class Ray
 
     @Override public String toString() {
 	return "Ray{" +
-	       "c=" + c +
+	       "coordinate=" + coordinate +
 	       ", v=" + v +
 	       '}';
     }
 
     public Coordinate3 getOrigin(){
-        return c;
+        return coordinate;
     }
 
     public Vector3 getVector(){

@@ -8,5 +8,4 @@ import ax.hx.hx.pathtracer.pathtracer.AbstractScene;
  * scenes inheriting from AbstractScene.
  */
 class SimpleScene extends AbstractScene {
-    public SimpleScene(){}
 }

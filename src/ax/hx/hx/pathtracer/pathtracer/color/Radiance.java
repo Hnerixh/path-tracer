@@ -1,12 +1,11 @@
 package ax.hx.hx.pathtracer.pathtracer.color;
 
-import ax.hx.hx.pathtracer.image.RGBPixel;
 
 /**
  * This holds the color of either a ray or the total radiance for a pixel.
  * Also provides functions for applying colors or other radiance to itself.
  *
- * Radiance can be null_influence, in that case the ray is scheduled
+ * Radiance can be nullInfluence, in that case the ray is scheduled
  * to be discarded, OR, when used as the total pixel radiance, black.
  *
  * Can be initialized with a r,g,b triple or  without any arguments. Without
@@ -18,7 +17,7 @@ public class Radiance
     private double r;
     private double g;
     private double b;
-    private boolean null_influence = false;
+    private boolean nullInfluence = false;
 
     private int influencedBy = 0;
 
@@ -31,11 +30,11 @@ public class Radiance
 
     // Null radiance
     public Radiance(){
-	    null_influence = true;
+	    nullInfluence = true;
     }
 
     public void discard(){
-        this.null_influence = true;
+        this.nullInfluence = true;
     }
 
     // Reset to the equivalent of a new Radiance object, with the supplied colors
@@ -43,38 +42,31 @@ public class Radiance
         this.r = r;
         this.g = g;
         this.b = b;
-        this. null_influence = false;
+        this.nullInfluence = false;
         this.influencedBy = 0;
     }
 
-    public RGBPixel getPixel(){
-	int ri = (int) (r * 255.0);
-	int gi = (int) (g * 255.0);
-	int bi = (int) (b * 255.0);
-	return new RGBPixel(ri, gi, bi);
-    }
-
     public boolean discarded(){
-        return null_influence;
+        return nullInfluence;
     }
 
     public void addInfluence(Radiance i){
 	// Calculates the avarage of all hits.
-    if(i.null_influence){
+    if(i.nullInfluence){
         return;
     }
-    if (this.null_influence){
-        r = i.getR();
-        g = i.getG();
-        b = i.getB();
+    if (this.nullInfluence){
+        r = i.r;
+        g = i.g;
+        b = i.b;
         influencedBy ++;
-        null_influence = false;
+        nullInfluence = false;
         return;
     }
 
-	r = (r*influencedBy + i.getR())/(influencedBy + 1);
-	g = (g*influencedBy + i.getG())/(influencedBy + 1);
-	b = (b*influencedBy + i.getB())/(influencedBy + 1);
+	r = (r*influencedBy + i.r)/(influencedBy + 1);
+	g = (g*influencedBy + i.g)/(influencedBy + 1);
+	b = (b*influencedBy + i.b)/(influencedBy + 1);
 	influencedBy++;
     }
 
@@ -86,10 +78,10 @@ public class Radiance
 //    }
 // --Commented out by Inspection STOP (4/7/14 12:45 PM)
 
-    public void applyColor(Color c){
-        r *= c.r;
-        g *= c.g;
-        b *= c.b;
+    public void applyColor(Color color){
+        r *= color.r;
+        g *= color.g;
+        b *= color.b;
     }
 
     public double getR() {

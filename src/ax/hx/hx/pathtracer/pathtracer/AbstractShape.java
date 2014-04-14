@@ -1,17 +1,13 @@
 package ax.hx.hx.pathtracer.pathtracer;
 
 import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
-import ax.hx.hx.pathtracer.pathtracer.color.IntersectionInfo;
 import ax.hx.hx.pathtracer.pathtracer.material.DummyMaterial;
-import ax.hx.hx.pathtracer.pathtracer.math.Ray;
 
 /**
  * Created by hx on 3/8/14.
  */
 public abstract class AbstractShape implements Shape
 {
-    // TODO Kan man ersätta den här med null;?
-    private static final Radiance NULL_RADIANCE = new Radiance(0.0,0.0,0.0);
 
     private Material material = new DummyMaterial();
 

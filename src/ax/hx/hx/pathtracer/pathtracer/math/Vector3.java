@@ -15,9 +15,9 @@ public class Vector3
     }
 
     public Vector3(Vector3 vec){
-        this.x = vec.getX();
-        this.y = vec.getY();
-        this.z = vec.getZ();
+        this.x = vec.x;
+        this.y = vec.y;
+        this.z = vec.z;
     }
 
     public Vector3(Coordinate3 coord){
@@ -34,15 +34,15 @@ public class Vector3
 
 
     public void add(Vector3 vec){
-        x += vec.getX();
-        y += vec.getY();
-        z += vec.getZ();
+        x += vec.x;
+        y += vec.y;
+        z += vec.z;
     }
 
     public void subtract(Vector3 vec){
-        x -= vec.getX();
-        y -= vec.getY();
-        z -= vec.getZ();
+        x -= vec.x;
+        y -= vec.y;
+        z -= vec.z;
     }
 
     public double dotProduct(Vector3 vec){
@@ -50,17 +50,17 @@ public class Vector3
         double ty = y;
         double tz = z;
 
-        double vx = vec.getX();
-        double vy = vec.getY();
-        double vz = vec.getZ();
+        double vx = vec.x;
+        double vy = vec.y;
+        double vz = vec.z;
 
         return (tx*vx + ty*vy + tz*vz);
     }
 
-    public void scale(double s){
-        x *= s;
-        y *= s;
-        z *= s;
+    public void scale(double scale){
+        x *= scale;
+        y *= scale;
+        z *= scale;
     }
 
     public Vector3 crossProduct(Vector3 vec){
@@ -68,9 +68,9 @@ public class Vector3
         double uy = this.y;
         double uz = this.z;
 
-        double vx = vec.getX();
-        double vy = vec.getY();
-        double vz = vec.getZ();
+        double vx = vec.x;
+        double vy = vec.y;
+        double vz = vec.z;
 
         double x = uy*vz - uz*vy;
         double y = uz*vx - ux*vz;

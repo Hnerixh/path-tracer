@@ -25,6 +25,7 @@ public interface Material
 {
     public Ray getRandomRay(Ray ray, Normal normal, Coordinate3 origin);
 
+    // IDEA ANTIWARNING
     // Current materials may not use every argument,
     // but they are left here for the future,
     // in case someone would like to implement a more complex BRDF.

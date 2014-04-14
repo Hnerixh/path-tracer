@@ -2,12 +2,17 @@ package ax.hx.hx.pathtracer.pathtracer.math;
 
 /**
  * This is a simple random number generator. It can only generate doubles in [0,1[.
- * It is not thread safe, and usage of this class in multiple threads could lead to race conditions.
+ * It is not thread safe, and usage of this class in multiple threads could/should lead to race conditions.
  * However, because we only care about the numbers being *somewhat* random, and *somewhat* evenly distributed,
  * we don't care about the race conditions that are guaranteed to happen almost all the time.
  */
-public class Rand {
+public final class Rand {
+    // IDEA ANTIWARNING
+    // Magic numbers in a magic number generator is okay.
     private static long seed = 42;
+
+    private Rand() {}
+
     // The multiplier and incrementation are the same as in glibc.
     //
     // Also, because a call only only results in one addition,

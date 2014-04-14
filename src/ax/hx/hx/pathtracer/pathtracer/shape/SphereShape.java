@@ -14,6 +14,7 @@
   {
       private final Coordinate3 origin;
       private final double radius;
+      private static final double EPSILON = 0.000001;
       public SphereShape(Coordinate3 origin, double radius){
           this.origin = origin;
           this.radius = radius;
@@ -73,19 +74,19 @@
 	      }
 
 	      // Sphere behind observer, return null
-	      if (tb < 0.00001) {
+	      if (tb < EPSILON) {
 		 return null;
 	      }
 
 	      // Entire sphere in front of observer
-	      if (ta > 0.00001){
+	      if (ta > EPSILON){
 		 t = ta;
-		  t -= 0.000001; // Avoid rounding errors
+		  t -= EPSILON; // Avoid rounding errors
 	      }
 	      // Observer in sphere;
 	      else {
 		  t = tb;
-		  t += 0.000001; // Avoid rounding errors
+		  t += EPSILON; // Avoid rounding errors
 	      }
           }
 

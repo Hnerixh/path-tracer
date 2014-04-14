@@ -14,6 +14,7 @@ public class PlaneShape extends AbstractShape
 {
     private final Normal planeNormal;
     private final Coordinate3 coord;
+    private final static double EPSILON = 0.000001;
 
     public IntersectionInfo intersection(Ray ray){
         // Calculate the intersection between a ray and a plane.
@@ -40,7 +41,7 @@ public class PlaneShape extends AbstractShape
         if (t <= 0) {
             return null;
         }
-	t -= 0.000001; // Avoid rounding errors.
+	t -= EPSILON; // Avoid rounding errors.
         v.scale(t);
         p0.add(v);
 

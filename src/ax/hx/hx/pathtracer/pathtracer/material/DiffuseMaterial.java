@@ -6,7 +6,7 @@ import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
 import ax.hx.hx.pathtracer.pathtracer.Material;
 import ax.hx.hx.pathtracer.pathtracer.math.Normal;
 import ax.hx.hx.pathtracer.pathtracer.math.Ray;
-import ax.hx.hx.pathtracer.pathtracer.math.RayFactory;
+import ax.hx.hx.pathtracer.pathtracer.math.RayMath;
 
 /**
  * This is a diffuse material.
@@ -25,8 +25,8 @@ public class DiffuseMaterial implements Material
         this.color = new Color(1,1,1);
     }
     public Ray getRandomRay(Ray ray, Normal normal, Coordinate3 origin){
-        return RayFactory.newCosineImportanceWeightedRay(normal, origin, ray);
-	// return RayFactory.newRayFromNormal(normal, origin);
+        return RayMath.newCosineImportanceWeightedRay(normal, origin, ray);
+	// return RayMath.newRayFromNormal(normal, origin);
     }
 
     public void applyToRadiance(Ray incoming, Ray outgoing, Normal normal, Radiance incomingRadiance){

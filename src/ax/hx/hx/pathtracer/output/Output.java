@@ -26,10 +26,9 @@ import java.io.*;
 public class Output {
     private int xsize;
     private int ysize;
-    private boolean highBitDepth;
     private File file;
     private Tonemapper tonemapper;
-    private int max_val = 255;
+    private int maxVal = 255;
 
     public int getXsize() {
         return xsize;
@@ -46,12 +45,13 @@ public class Output {
         this.tonemapper = tonemapper;
 
         if (highBitDepth){
-            max_val = 65535;
+            maxVal = 65535;
         }
     }
 
+    // ANTIWARNING
+    // Ask the Output (noun) to output (verb)
     public void output(Radiance[] radiances){
-        int size = xsize*ysize;
         if (file.exists()){
             file.delete();
         }
@@ -64,12 +64,12 @@ public class Output {
             // Width and height
             writer.write(xsize + " " + ysize + "\n");
             // Max pixel value
-            writer.write(max_val + "\n");
+            writer.write(maxVal + "\n");
 
             for (Radiance radiance : radiances){
-                int r = (int) (tonemapper.tonemapR(radiance) * max_val);
-                int g = (int) (tonemapper.tonemapG(radiance) * max_val);
-                int b = (int) (tonemapper.tonemapB(radiance) * max_val);
+                int r = (int) (tonemapper.tonemapR(radiance) * maxVal);
+                int g = (int) (tonemapper.tonemapG(radiance) * maxVal);
+                int b = (int) (tonemapper.tonemapB(radiance) * maxVal);
 
                 writer.write(r + " " + g + " " + b + "\n");
             }

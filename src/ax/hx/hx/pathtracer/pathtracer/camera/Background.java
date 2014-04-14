@@ -1,7 +1,6 @@
 package ax.hx.hx.pathtracer.pathtracer.camera;
 
 import ax.hx.hx.pathtracer.pathtracer.color.Color;
-import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 import ax.hx.hx.pathtracer.pathtracer.math.Normal;
 
 import javax.imageio.ImageIO;
@@ -21,7 +20,7 @@ public class Background {
     private int width;
     private int heigth;
 
-    private Color color;
+    private Color color = new Color(1.0,0.0,1.0); // Dummy color until it might get initialized.
 
 
     // According to documentation a ColorModel will always give values
@@ -74,11 +73,13 @@ public class Background {
 
     private Color getColorFromImage(int x, int y){
         int pixel = image.getRGB(x,y);
+	// IDEA ANTIWARNING
         // So this is why I wrote my own image output module...
-        // The normal non-stupid way did not want to play ball with me.
-        double r = (double) ((pixel & 0x00ff0000) >> 16);
-        double g = (double) ((pixel & 0x0000ff00) >> 8);
-        double b = (double) (pixel & 0x000000ff);
+        // The normal non-stupid way did not want to play ball with me,
+	// so manual mode it is.
+        double r = ((pixel & 0x00ff0000) >> 16);
+        double g = ((pixel & 0x0000ff00) >> 8);
+        double b = (pixel & 0x000000ff);
 
         r /= RANGE;
         b /= RANGE;

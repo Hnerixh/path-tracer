@@ -10,14 +10,15 @@ import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
 /**
  * Triangle shape. Initialized with three Coordinate3s.
  */
-public class TriangleShape extends AbstractShape
+class TriangleShape extends AbstractShape
 {
 
     private Vector3 c1;
     private Vector3 c2;
     private Vector3 c3;
+    private static final double EPSILON = 0.000001;
 
-    public TriangleShape(Coordinate3 c1, Coordinate3 c2, Coordinate3 c3){
+    TriangleShape(Coordinate3 c1, Coordinate3 c2, Coordinate3 c3){
         this.c1 = new Vector3(c1);
         this.c2 = new Vector3(c2);
         this.c3 = new Vector3(c3);
@@ -67,7 +68,7 @@ public class TriangleShape extends AbstractShape
 
         // doubles we use during calculation
         double det;
-        double inv_det;
+        double invDet;
         double u;
         double v;
 	double t;
@@ -83,17 +84,17 @@ public class TriangleShape extends AbstractShape
         det = edge1.dotProduct(p);
 
         // Ray parallel to the triangles plane.
-        double EPSILON = 0.000001;
+
         if (det > -EPSILON && det < EPSILON){
             return null;
         }
 
-        inv_det = 1/det;
+        invDet = 1/det;
 
         Vector3 tv = new Vector3(or);
         tv.subtract(v1);
 
-        u = tv.dotProduct(p) * inv_det;
+        u = tv.dotProduct(p) * invDet;
 
         if (u < 0.0 || u > 1.0){
             return null;
@@ -101,13 +102,13 @@ public class TriangleShape extends AbstractShape
 
         Vector3 q = tv.crossProduct(edge1);
 
-        v = dr.dotProduct(q) * inv_det;
+        v = dr.dotProduct(q) * invDet;
 
         if (v < 0 || u + v > 1){
             return null;
         }
 
-	t = edge2.dotProduct(q) * inv_det;
+	t = edge2.dotProduct(q) * invDet;
 
         if (t <= EPSILON){
             return null;

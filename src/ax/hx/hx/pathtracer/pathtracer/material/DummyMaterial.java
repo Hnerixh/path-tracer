@@ -13,7 +13,7 @@ import ax.hx.hx.pathtracer.pathtracer.math.Ray;
  */
 public class DummyMaterial implements Material
 {
-    public Ray getRandomRay(Ray incoming, Normal normal, Coordinate3 origin){
+    public Ray getRandomRay(Ray ray, Normal normal, Coordinate3 origin){
         return null;
     }
 

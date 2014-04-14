@@ -7,7 +7,7 @@ class CameraJob {
     public final int start;
     public final int end;
 
-    public CameraJob(int start, int end) {
+    CameraJob(int start, int end) {
         this.start = start;
         this.end = end;
     }

@@ -5,7 +5,9 @@ import java.io.File;
 /**
  * This is the simple main file.
  */
-class Main {
+public final class Main {
+    private Main() {}
+
     public static void main(String[] args){
         if (args.length < 2){
             System.out.println("Please supply at least two arguments.");
@@ -18,7 +20,6 @@ class Main {
             System.out.println("Could not parse scene");
             return;
         }
-
         renderer.render();
     }
 }

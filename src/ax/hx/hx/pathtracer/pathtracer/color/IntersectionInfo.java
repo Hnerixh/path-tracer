@@ -12,6 +12,11 @@ import ax.hx.hx.pathtracer.pathtracer.math.Ray;
  * coordinates of the intersection.
  */
 public class IntersectionInfo {
+    // IDEA ANTIWARNING
+    // May be used by future materials.
+    // IDEA ANTIWARNING II
+    // Simple data holder, no functionality.
+    // Using public fields for simplicity.
     public final Ray incoming;
     public final Normal normal;
     public final Coordinate3 hitCoord;

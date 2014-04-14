@@ -1,17 +1,16 @@
 package ax.hx.hx.pathtracer;
 
-import ax.hx.hx.pathtracer.image.RGBImage;
 import ax.hx.hx.pathtracer.pathtracer.camera.Camera;
 
 /**
  * This is the class that handles the render-write cycle.
  */
-public class Renderer {
+class Renderer {
     private final Camera camera;
     private final int writeInterval;
     private int targetSamples;
 
-    public Renderer(Camera camera, int writeInterval, int targetSamples) {
+    Renderer(Camera camera, int writeInterval, int targetSamples) {
         this.camera = camera;
         this.writeInterval = writeInterval;
         this.targetSamples = targetSamples;

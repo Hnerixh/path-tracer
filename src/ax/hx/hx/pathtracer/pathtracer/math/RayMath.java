@@ -4,8 +4,10 @@ package ax.hx.hx.pathtracer.pathtracer.math;
  * This is a utility class containing various functions for getting
  * randomized rays.
  */
-public class RayFactory
+public final class RayMath
 {
+    private RayMath() {}
+
     public static Ray newCosineImportanceWeightedRay(Normal normal, Coordinate3 origin, Ray ray){
         // There is a need for outgoing rays to be distributed
         // randomly by Lambert's cosine Law.
@@ -27,6 +29,8 @@ public class RayFactory
 
         double rx, ry, rz;
            do {
+	    // IDEA ANTIWARNING
+	    // This is okay, we want a number in [-1.0,1.0].
             rx = Rand.rand() * 2.0 - 1.0;
             ry = Rand.rand() * 2.0 - 1.0;
             rz = Rand.rand() * 2.0 - 1.0;
@@ -68,7 +72,7 @@ public class RayFactory
             cosTheta = Math.sqrt(1-sin2Theta);
         }
         double r0 = (n1-n2)/(n1+n2);
-        r0 = r0 * r0;
+	r0 *= r0;
         double x = 1 - cosTheta;
         return r0 + (1-r0) * x * x * x * x * x;
     }

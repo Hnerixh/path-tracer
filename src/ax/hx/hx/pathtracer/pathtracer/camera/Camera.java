@@ -3,7 +3,6 @@ package ax.hx.hx.pathtracer.pathtracer.camera;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import ax.hx.hx.pathtracer.image.RGBImage;
 import ax.hx.hx.pathtracer.output.Output;
 import ax.hx.hx.pathtracer.pathtracer.Scene;
 import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
@@ -24,7 +23,7 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
      private long totalTraces = 0; // Fun overflow after 1.5 hours if it happens to be an int.
      private long totalSuccesfulTraces = 0;
      private boolean hasWorkers = false;
-     private double RRratio;
+     private double RRratio; // ANTIWARNING RR = Russian Roulette
      private Output output;
 
      private final CameraWorkerInfo killswitch = new CameraWorkerInfo();
@@ -33,6 +32,7 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
      private BlockingQueue<CameraJob> jobQueue;
      private BlockingQueue<TraceResult> resultQueue;
 
+     // ANTIWARNING, see above
      public Camera(Scene scene, double focalLength, Output output, int renderDepth, double RRratio, int workers){
          this.scene = scene;
          this.width = output.getXsize();
@@ -55,17 +55,19 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
          createWorkers();
      }
 
-     public void killWorkers(){
-         killswitch.kill();
-     }
+// --Commented out by Inspection START (4/15/14 1:19 AM):
+//     public void killWorkers(){
+//         killswitch.kill();
+//     }
+// --Commented out by Inspection STOP (4/15/14 1:19 AM)
 
      private void createWorkers(){
-         CameraWorker worker;
-         Thread workerThread;
-         for (int i = 0; i < workers; i++) {
-             worker = new CameraWorker(jobQueue, resultQueue, renderDepth, RRratio, scene, killswitch, width, heigth, focalLength, radiances);
-             workerThread = new Thread(worker);
-             workerThread.start();
+	 for (int i = 0; i < workers; i++) {
+	     CameraWorker worker =
+		     new CameraWorker(jobQueue, resultQueue, renderDepth, RRratio, scene, killswitch, width, heigth,
+				      focalLength, radiances);
+	     Thread workerThread = new Thread(worker);
+	     workerThread.start();
              hasWorkers = true;
          }
      }
@@ -104,11 +106,11 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
                 TraceResult res = resultQueue.take();
                 totalSuccesfulTraces += res.succesfulTraces;
                 totalTraces += res.traces;
-                double hitratio = (100.0 * (double) totalSuccesfulTraces / (double) totalTraces);
-                double spp = ((double) totalTraces / (double) size); // Traced samples per pixel
-                double real_spp = spp * hitratio / 100.0; // Actual emitter hits per pixel
+                double hitratio = (100.0 * totalSuccesfulTraces / totalTraces);
+                double spp = (totalTraces / (double) size); // Traced samples per pixel
+                double realSpp = spp * hitratio / 100.0; // Actual emitter hits per pixel
                 System.out.println("Traces per pixel: " + spp);
-                System.out.println("Samples per pixel: " + real_spp);
+                System.out.println("Samples per pixel: " + realSpp);
                 System.out.println("Hit probability: " + hitratio + "%");
                 System.out.println("-------------");
              }

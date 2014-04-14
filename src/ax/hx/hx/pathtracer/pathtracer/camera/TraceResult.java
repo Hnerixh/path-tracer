@@ -8,7 +8,7 @@ package ax.hx.hx.pathtracer.pathtracer.camera;
 class TraceResult {
     public final int traces;
     public final int succesfulTraces;
-    public TraceResult(int traces, int succesfulTraces){
+    TraceResult(int traces, int succesfulTraces){
         this.traces = traces;
         this.succesfulTraces = succesfulTraces;
     }

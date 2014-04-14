@@ -26,7 +26,7 @@ class CameraWorker implements Runnable {
     private final int width;
     private final int heigth;
     private final Radiance[] radiances;
-    private final double RRratio;
+    private final double RRratio; // ANTI WARNING RR = Russian Roulette
 
     CameraWorker(BlockingQueue<CameraJob> jobQueue,
                  BlockingQueue<TraceResult> resultQueue,
@@ -52,21 +52,20 @@ class CameraWorker implements Runnable {
     }
 
     public void run() {
-        CameraJob job;
-        Radiance radiance = new Radiance(1.0, 1.0, 1.0);
+	Radiance radiance = new Radiance(1.0, 1.0, 1.0);
         while (true) {
             if (killswitch.shouldDie()){
                 return;
             }
             try {
-                job = jobQueue.take();
-                int traces = 0;
+		CameraJob job = jobQueue.take();
+		int traces = 0;
                 int succesfulTraces = 0;
                 for (int i = job.start; i < job.end; i++) {
                     traces++;
                     radiance = scene.pathtrace(rayForPixel(i), depth, RRratio, radiance);
                     if (radiance.discarded()){
-                        continue;
+                        continue; // IDEA ANTIWARNING "continue" with next pixel
                     }
                     radiances[i].addInfluence(radiance);
                     succesfulTraces++;

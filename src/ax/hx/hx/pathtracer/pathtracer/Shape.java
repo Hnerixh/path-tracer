@@ -1,6 +1,5 @@
 package ax.hx.hx.pathtracer.pathtracer;
 
-import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 import ax.hx.hx.pathtracer.pathtracer.color.IntersectionInfo;
 import ax.hx.hx.pathtracer.pathtracer.math.Ray;
 

@@ -12,6 +12,7 @@ import ax.hx.hx.pathtracer.pathtracer.math.Ray;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public abstract class AbstractScene implements Scene
 {
     private List<Shape> shapes = new ArrayList<Shape>();
@@ -58,39 +59,35 @@ public abstract class AbstractScene implements Scene
 
 
     public Radiance pathtrace(Ray ray, int depth,
-                              double russianRouletteKillPropability,
+                              double RRratio,
                               Radiance radiance){
 
-        Shape hit;
-        double nearest_hit_distance;
-        IntersectionInfo nearest_hit_info;
-        Coordinate3 ray_origin;
-        IntersectionInfo hit_info;
-        Coordinate3 intersection_point;
-        Material material;
-        Ray next_ray;
-        Normal normal;
-        Coordinate3 coord;
-
-        radiance.reset(1.0, 1.0, 1.0);
+	radiance.reset(1.0, 1.0, 1.0);
 
         while(true){
-            hit = null;
-            nearest_hit_distance = -1;
-            nearest_hit_info = null;
-            ray_origin = ray.getOrigin();
-            hit_info = null;
-            intersection_point = null;
+	    Shape hit = null;
+	    double nearest_hit_distance = -1;
+	    IntersectionInfo nearest_hit_info = null;
+	    Coordinate3 ray_origin = ray.getOrigin();
+	    // IDEA ANTIWARNING
+            // Apparently I did not use the null I assigned the variables here.
+            // I could skip assigning them null explicidly, but then I loose clarity.
+	    IntersectionInfo hit_info = null;
+	    Coordinate3 intersection_point = null;
 
-            for (Shape shape : shapes) {
+	    for (Shape shape : shapes) {
                 hit_info = shape.intersection(ray);
 
                 if (hit_info == null){ // Missed
+		    // IDEA ANTIWARNING
+		    // "continue with the next shape"
+		    // Easy to understand, unlike other ways to do this.
                     continue;          // continue with next object
                 }
                 // Hit something. Figure out if it is the closest hit
                 // yet. (or the first)
                 intersection_point = hit_info.hitCoord;
+		// IDEA ANTIWARNING yes, it is okay to compare floating point in this case.
                 if (intersection_point.distance(ray_origin) <= nearest_hit_distance
                     || nearest_hit_distance == -1){ // If -1, this is the first hit.
                     hit = shape;
@@ -107,14 +104,14 @@ public abstract class AbstractScene implements Scene
             }
 
             // Hit something :D
-            material = hit.getMaterial();
-            normal = nearest_hit_info.normal;
-            coord = nearest_hit_info.hitCoord;
+	    Material material = hit.getMaterial();
+	    Normal normal = nearest_hit_info.normal;
+	    Coordinate3 coord = nearest_hit_info.hitCoord;
 
-            // next_ray may be null
-            next_ray = material.getRandomRay(ray, normal, coord);
+	    // next_ray may be null
+	    Ray next_ray = material.getRandomRay(ray, normal, coord);
 
-            // Apply the material to our radiance. The material will
+	    // Apply the material to our radiance. The material will
             // handle the null situation.
             material.applyToRadiance(next_ray, ray, normal, radiance);
 
@@ -130,7 +127,7 @@ public abstract class AbstractScene implements Scene
             depth--;
             if (depth <= 0){
                 // Apply russian roulette at this stage.
-                if (Rand.rand() < russianRouletteKillPropability){
+                if (Rand.rand() < RRratio){
                     // Terminate it...
                     radiance.discard();
                     return radiance;
@@ -146,9 +143,11 @@ public abstract class AbstractScene implements Scene
         return background.worldColor(normal);
     }
 
-    protected List<Shape> getShapes() {
-	return shapes;
-    }
+// --Commented out by Inspection START (4/15/14 1:19 AM):
+//    protected List<Shape> getShapes() {
+//	return shapes;
+//    }
+// --Commented out by Inspection STOP (4/15/14 1:19 AM)
 
     public void setShapes(final List<Shape> shapes) {
 	this.shapes = shapes;
