@@ -3,6 +3,9 @@ package ax.hx.hx.pathtracer;
 import ax.hx.hx.pathtracer.image.ImageOutput;
 import ax.hx.hx.pathtracer.image.PPMOutput;
 import ax.hx.hx.pathtracer.image.RGBImage;
+import ax.hx.hx.pathtracer.output.LinearTonemap;
+import ax.hx.hx.pathtracer.output.Output;
+import ax.hx.hx.pathtracer.output.Tonemapper;
 import ax.hx.hx.pathtracer.pathtracer.Material;
 import ax.hx.hx.pathtracer.pathtracer.Shape;
 import ax.hx.hx.pathtracer.pathtracer.camera.Background;
@@ -47,6 +50,8 @@ class SceneParser {
         int write_interval = 1;
         Background background = new Background(0,0,0);
         double focal_length = 1.0;
+        Tonemapper tonemapper = new LinearTonemap();
+        boolean high_bit_depth = false;
 
         try {
             br = new BufferedReader(new FileReader(path));
@@ -121,6 +126,11 @@ class SceneParser {
                 russian_roulette_death_probability = Double.parseDouble(line_parts[1]);
                 continue;
             }
+
+            if (line.startsWith("16bit")){
+                high_bit_depth = true;
+            }
+
             System.out.println("Unknown option: " + line);
         }
 
@@ -143,6 +153,7 @@ class SceneParser {
                 double b = Double.parseDouble(line_parts[3]);
                 double ior = Double.parseDouble(line_parts[4]);
                 materials.add(new DiffuseMirrorBlend(new Color(r,g,b),ior));
+                continue;
             }
 
             if (line.startsWith("mirror")){
@@ -227,21 +238,16 @@ class SceneParser {
         scene.setShapes(shapes);
         scene.setBackground(background);
 
-        RGBImage image = new RGBImage(xSize, ySize);
-        ImageOutput imageOutput = new PPMOutput(image, outputPath);
-        image.setOutputModule(imageOutput);
+        Output output = new Output(outputPath, xSize, ySize, high_bit_depth, tonemapper);
 
         int cores = Runtime.getRuntime().availableProcessors();
         Camera camera = new Camera(scene, focal_length,
-                                image,
+                                output,
                                 depth,
                                 russian_roulette_death_probability,
                                 cores);
 
-        return new Renderer(camera,
-                                         image,
-                                         write_interval,
-                                         target_spp);
+        return new Renderer(camera, write_interval, target_spp);
     }
 
     private static String readLine() {

@@ -4,6 +4,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import ax.hx.hx.pathtracer.image.RGBImage;
+import ax.hx.hx.pathtracer.output.Output;
 import ax.hx.hx.pathtracer.pathtracer.Scene;
 import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 
@@ -18,13 +19,13 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
      private int heigth;
      private int size;
      private double focalLength;
-     private Radiance[] influenses;
-     private RGBImage image;
+     private Radiance[] radiances;
      private int renderDepth;
      private long totalTraces = 0; // Fun overflow after 1.5 hours if it happens to be an int.
      private long totalSuccesfulTraces = 0;
      private boolean hasWorkers = false;
      private double RRratio;
+     private Output output;
 
      private final CameraWorkerInfo killswitch = new CameraWorkerInfo();
      private int workers = 2;
@@ -32,13 +33,13 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
      private BlockingQueue<CameraJob> jobQueue;
      private BlockingQueue<TraceResult> resultQueue;
 
-     public Camera(Scene scene, double focalLength, RGBImage image, int renderDepth, double RRratio, int workers){
+     public Camera(Scene scene, double focalLength, Output output, int renderDepth, double RRratio, int workers){
          this.scene = scene;
-         this.width = image.getWidth();
-         this.heigth = image.getHeight();
+         this.width = output.getXsize();
+         this.heigth = output.getYsize();
          this.size = width * heigth;
          this.focalLength = focalLength;
-         this.image = image;
+         this.output = output;
          this.renderDepth = renderDepth;
          this.workers = workers;
          this.RRratio = RRratio;
@@ -46,9 +47,9 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
          jobQueue = new ArrayBlockingQueue<CameraJob>(size);
          resultQueue = new ArrayBlockingQueue<TraceResult>(size);
 
-         influenses = new Radiance[size];
+         radiances = new Radiance[size];
          for (int i = 0; i < size; i++) {
-             influenses[i] = new Radiance();
+             radiances[i] = new Radiance();
          }
 
          createWorkers();
@@ -62,7 +63,7 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
          CameraWorker worker;
          Thread workerThread;
          for (int i = 0; i < workers; i++) {
-             worker = new CameraWorker(jobQueue, resultQueue, renderDepth, RRratio, scene, killswitch, width, heigth, focalLength, influenses);
+             worker = new CameraWorker(jobQueue, resultQueue, renderDepth, RRratio, scene, killswitch, width, heigth, focalLength, radiances);
              workerThread = new Thread(worker);
              workerThread.start();
              hasWorkers = true;
@@ -93,9 +94,7 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
      }
 
      public void render(){
-         for (int i = 0; i < size; i++) {
-             image.appendPixel(influenses[i].getPixel());
-         }
+          output.output(radiances);
      }
 
 

@@ -92,15 +92,15 @@ public class Radiance
         b *= c.b;
     }
 
-    double getR() {
+    public double getR() {
 	return r;
     }
 
-    double getG() {
+    public double getG() {
 	return g;
     }
 
-    double getB() {
+    public double getB() {
 	return b;
     }
 }

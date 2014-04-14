@@ -10,13 +10,11 @@ public class Renderer {
     private final Camera camera;
     private final int writeInterval;
     private int targetSamples;
-    private final RGBImage image;
 
-    public Renderer(Camera camera, RGBImage image, int writeInterval, int targetSamples) {
+    public Renderer(Camera camera, int writeInterval, int targetSamples) {
         this.camera = camera;
         this.writeInterval = writeInterval;
         this.targetSamples = targetSamples;
-        this.image = image;
     }
 
     public void render(){
@@ -25,7 +23,6 @@ public class Renderer {
         while (targetSamples > 0) {
             camera.doPasses(writeInterval);
             camera.render();
-            image.output();
             System.out.println("Wrote to file");
             System.out.println(currentRenderTime(renderStart));
             targetSamples -= writeInterval;

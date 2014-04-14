@@ -103,7 +103,6 @@ public abstract class AbstractScene implements Scene
             // Anyway, done here, return.
             if (hit == null){
                 radiance.applyColor(worldColor(ray));
-                System.out.println("Hit lamp!");
                 return radiance;
             }
 

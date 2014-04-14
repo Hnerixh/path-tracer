@@ -1,4 +1,4 @@
-package ax.hx.hx.pathtracer.pathtracer.camera;
+package ax.hx.hx.pathtracer.pathtracer.scene;
 
 import ax.hx.hx.pathtracer.image.ImageOutput;
 import ax.hx.hx.pathtracer.image.PPMOutput;
@@ -7,6 +7,7 @@ import ax.hx.hx.pathtracer.pathtracer.AbstractScene;
 import ax.hx.hx.pathtracer.pathtracer.AbstractShape;
 import ax.hx.hx.pathtracer.pathtracer.Material;
 import ax.hx.hx.pathtracer.pathtracer.Scene;
+import ax.hx.hx.pathtracer.pathtracer.camera.Camera;
 import ax.hx.hx.pathtracer.pathtracer.color.Color;
 import ax.hx.hx.pathtracer.pathtracer.material.*;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
