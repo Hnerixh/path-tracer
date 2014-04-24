@@ -7,5 +7,5 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
  */
 public interface CameraObserver
 {
-    public void passDone(Radiance[] radiance);
+    public void passDone(Radiance[] radiances);
 }

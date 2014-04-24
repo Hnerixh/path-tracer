@@ -17,8 +17,18 @@ public class IntersectionInfo {
     // IDEA ANTIWARNING II
     // Simple data holder, no functionality.
     // Using public fields for simplicity.
+    
+    /**
+     * The incoming ray
+     */
     public final Ray incoming;
+    /**
+     * The normal in the place of the hit.
+     */
     public final Normal normal;
+    /**
+     * Coordinates of the hit.
+     */
     public final Coordinate3 hitCoord;
     public IntersectionInfo(Ray incoming, Normal normal, Coordinate3 hitCoord){
         this.incoming = incoming;

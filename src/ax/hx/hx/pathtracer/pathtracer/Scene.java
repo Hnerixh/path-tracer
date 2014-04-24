@@ -12,7 +12,10 @@ import ax.hx.hx.pathtracer.pathtracer.math.Ray;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Responsible for pathtracing a scene as well as keeping track of the objects in the scene.
+ * The most important function here is pathtrace(), which performs pathtracing on the given ray.
+ */
 public class Scene
 {
     private List<Shape> shapes = new ArrayList<Shape>();
@@ -98,7 +101,7 @@ public class Scene
         }
     }
 
-    Color worldColor(Ray ray){
+    private Color worldColor(Ray ray){
         Normal normal = new Normal(ray.getVector());
         return background.worldColor(normal);
     }

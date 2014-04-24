@@ -8,7 +8,6 @@ import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
 import ax.hx.hx.pathtracer.pathtracer.math.Normal;
 import ax.hx.hx.pathtracer.pathtracer.math.Ray;
 import ax.hx.hx.pathtracer.pathtracer.math.RayMath;
-import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
 
 /**
  * A perfectly specular material, also known as a mirror.

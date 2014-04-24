@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import ax.hx.hx.pathtracer.output.Output;
 import ax.hx.hx.pathtracer.pathtracer.Scene;
 import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 

@@ -13,7 +13,7 @@ public final class RandomGen
     private static long seed = 4; // IDEA ANTIWARNING seed might be short, but it is actually the best name for this variable.
 
     private static final long MOD = 2147483648L; // Modulo
-    private static final double DOUBLE_MOD = 1/2147483648.0; // Modulo in double
+    private static final double DOUBLE_MOD = 1 / 2147483648.0; // Modulo in double // IDEA ANTIWARNING that's not a magic number...
     private static final long MULTIPLIER = 1103515245L; // Multiplication factor
     private static final long OFFSET = 12345L; // Incrementation size
     // The multiplier and incrementation are the same as in glibc.

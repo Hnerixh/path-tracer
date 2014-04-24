@@ -75,7 +75,7 @@ public class Background {
     private Color getColorFromImage(int x, int y){
         int pixel = image.getRGB(x,y);
 	// IDEA ANTIWARNING
-        // So this is why I wrote my own image output module...
+        // So this is why I wrote my own image ax.hx.hx.pathtracer.output module...
         // The normal non-stupid way did not want to play ball with me,
 	// so manual mode it is.
 	// This is neither nice nor correct, but rather funny.

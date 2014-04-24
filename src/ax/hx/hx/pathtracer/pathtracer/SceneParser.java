@@ -1,11 +1,8 @@
-package ax.hx.hx.pathtracer;
+package ax.hx.hx.pathtracer.pathtracer;
 
 import ax.hx.hx.pathtracer.output.LinearTonemap;
 import ax.hx.hx.pathtracer.output.Output;
 import ax.hx.hx.pathtracer.output.Tonemapper;
-import ax.hx.hx.pathtracer.pathtracer.Material;
-import ax.hx.hx.pathtracer.pathtracer.Scene;
-import ax.hx.hx.pathtracer.pathtracer.Shape;
 import ax.hx.hx.pathtracer.pathtracer.camera.Background;
 import ax.hx.hx.pathtracer.pathtracer.camera.Camera;
 import ax.hx.hx.pathtracer.pathtracer.color.Color;

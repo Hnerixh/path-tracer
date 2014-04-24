@@ -20,10 +20,6 @@ public abstract class AbstractShape implements Shape
         this.material = material;
     } // Should only be used on initialization.
 
-    public Material getMaterial(){
-        return material;
-    }
-
     public Ray newRay(Ray oldRay, Normal normal, Coordinate3 coord){
 	return material.getRandomRay(oldRay, normal, coord);
     }

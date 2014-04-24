@@ -5,8 +5,17 @@
    */
   public class Coordinate3
   {
+      /**
+       * x coordinate
+       */
       public final double x;
+      /**
+       * y coordinate
+       */
       public final double y;
+      /**
+       * z coordinate
+       */
       public final double z;
       public Coordinate3(double x, double y, double z) {
           this.x = x;

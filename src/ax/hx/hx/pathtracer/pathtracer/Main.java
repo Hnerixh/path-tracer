@@ -1,4 +1,4 @@
-package ax.hx.hx.pathtracer;
+package ax.hx.hx.pathtracer.pathtracer;
 
 import java.io.File;
 

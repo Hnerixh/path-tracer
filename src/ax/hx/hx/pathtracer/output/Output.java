@@ -18,7 +18,7 @@ import java.io.*;
  *
  * Usage with bit depths other than 8 bit are a bit unspecified. The
  * file will be written just fine, but it's uncertain if image viewing
- * programs will accept the result. For example 16 bit output is okay
+ * programs will accept the result. For example 16 bit ax.hx.hx.pathtracer.output is okay
  * with feh, but not with gimp. The first Pixel in the Image sets the
  * bit-depth. Usage with images that contains pixels of different
  * types are just stupid, and therefore unspecified.
@@ -36,15 +36,7 @@ public class Output implements CameraObserver
     private static final int TWO_HUNDRED_FIFTY_FIVE = 255;
     private static final int TWO_TO_THE_POWER_OF_16_MINUS_ONE = 65535;
     private int maxVal = TWO_HUNDRED_FIFTY_FIVE;
-   
 
-    public int getXsize() {
-        return xsize;
-    }
-
-    public int getYsize() {
-        return ysize;
-    }
 
     public Output(File file, int xsize, int ysize, boolean highBitDepth, Tonemapper tonemapper) {
         this.xsize = xsize;
