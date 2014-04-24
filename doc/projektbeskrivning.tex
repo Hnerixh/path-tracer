@@ -1,0 +1,584 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{tgtermes}
+\usepackage{titling}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{todonotes}
+
+\renewcommand{\contentsname}{Innehåll}
+
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}
+\makeatletter
+\def\@makechapterhead#1{%
+  \vspace*{50\p@}%
+  {\parindent \z@ \raggedright \normalfont
+    \interlinepenalty\@M
+    \Huge\bfseries  \thechapter.\quad #1\par\nobreak
+    \vskip 40\p@
+  }}
+\makeatother
+
+
+
+\begin{document}
+\title{Projektbeskrivning}
+\subtitle{Pathtracer}
+\author{Henrik Henriksson <henhe459@student.liu.se> \\\\
+Handledare: Daniel de Leng <daniel.de.leng@liu.se>}
+\maketitle
+\clearpage
+\tableofcontents
+\clearpage
+
+\section{Introduktion}
+Jag har skrivit en enkel pathtracer. En pathtracer är en typ av
+Monte-Carlo baserad 3D renderare, som i princip simulerar ljusets
+flöde. Metoden bygger på relativt enkla ideer och ger väldigt bra
+reslutat, men är \emph{väldigt} beräkningsintensiv jämfört med andra
+metoder.
+
+Min implementation är inte kapabel till helt fotorealistiska bilder,
+mest på grund av att stöd för texturer saknas. Den lyckas dock mäta
+sig med Open-Source renderaren
+Luxrender\footnote{\url{www.luxrender.net}} i vissa enklare
+scener. Prestandan är dock värdelös, ungefär 3-4 gånger långsammare än
+smallpt
+\footnote{\url{http://www.kevinbeason.com/smallpt/}}.
+\todo{Visa jämförelse}
+
+
+\section{Bakgrundsinformation}
+Pathtracing
+\footnote{\url{http://en.wikipedia.org/wiki/Path_tracing}}
+ är en relativt gammal metod för 3D-rendering, men har
+trots det inte används särskillt mycket tidigare. Detta beror på hur
+enormt beräkningsintensiv pathtracing är.
+
+\subsection{Algoritm}
+Algoritmen för pathtracing är relativt enkel.
+\begin{verbatim}
+för alla pixlar {
+   1. Skicka ut en stråle från pixeln.
+   2. Ta reda på vad strålen träffar först.
+   3. Om träffen var en ljuskälla, spåra tillbaka till kameran.
+      Annars: Skicka ut ny slumpmässig stråle från senaste träffen.
+   4. GOTO 2.
+   }
+\end{verbatim}
+Detta kallar jag för ett \emph{pass} i min kod. Enbart ett pass ger en
+värdelös svart bild med några färgglada pixlar. Upprepar man
+algoritmen några tusen gånger och tar medelvärdet kommer bilden
+konvergera mot en ``fysiskt korrekt'' bild.
+
+Självklart kan man inte låta algoritmen löpa amok, då kommer man rent
+statistiskt sätt få några väldigt långa loopar. Därför avbryter man
+spårningen med hjälp av antingen ett maxdjup eller rysk roulette,
+alltså att man avbryter spårningen slumpmässigt med en viss
+sannolikhet. Jag använder mig av en kombination av minimidjup och rysk
+roulette.
+
+\subsection{Material}
+En stor del av 3D rendering är att få materialen rätt. Pathtracing
+lämpar sig väl för fysisk simulering av material. Jag har
+implementerat perfekt lambertiell reflektion, perfekt speculär
+reflektion, refraktion med Schlicks approximation, samt ett
+icke-fysikaliskt material som fungerar som påminner om en lackad matt
+yta. Alla material skickar ut nya slumpmässiga strålar enligt en
+distribution specifik för materialet, samt påverkar färg och
+intensitet.
+
+\subsection{Om pathtracing i allmänhet}
+Medelvärdet av lyckade spårningar, \emph{samples}, kan räknas med
+\emph{samples per pixel, spp}. Vissa scener kräver låg spp, till
+exempel en scen med enbart perfekt reflektiva ytor kan kräva bara ett
+pass. Andra scener, ofta små slutna scener med små ljuskällor, kan
+kräva tiotusentals spp för att se bra ut.
+
+Pathtracing gör också många saker som är svåra, eller rent av omöjliga
+att implementera med rasterisering, helt ``gratis''. Till exempel
+kaustik, mjuka skuggor, volymeriska ljuskällor, med mera, kommer
+gratis som en följd av att man använder pathtracing.
+
+Trots att pathtracing är beräkningsmässigt tungt finns en stor fördel
+med metoden. Den är väldigt lätt att paralellisera. Tidigare nämnda
+Luxrender paralelliserar över nätverk, CPU och GPU, medan spelmotorn Brigade
+\footnote{\url{http://brigade3.com/}} lyckas köra pathtracing i
+realtime på GPU. När antalet tillgängliga kärnor har ökat har även
+användarna ökat. Tidigare var det ofta arkitekter och artister som
+renderade stillbilder med pathtracing. De senare åren har dock
+pathtracing används i flera stora filmproduktioner, till exempel Iron
+Man 3, Pacific Rim och Gravity. \footnote{\url{https://www.solidangle.com/}}
+
+
+
+
+\section{Milstolpar}
+Dessa är mina ursprungliga milstolpar. Observera att de var skriva med
+avseende på en \emph{raytracer}. Milstolpe 10 har ingenting att göra i
+en pathtracer.
+
+\begin{tabular}{|l|l|}
+  \hline
+\# & Beskrivning (Kan innehålla svengelska) \\
+\hline
+1 & Få java att skriva en bild till disk. \\
+2 & Planera på papper. \\
+3 & Implementera grundläggande datatyper och klasser, till exempel vektorer. \\
+4 & Gör det möjligt att beskriva scener. \\
+5 & Skapa klasser för sfärer och plan som kan placeras i scener. \\
+6 & Gör det möjligt att lägga till ljuskällor. \\
+7 & Gör det möjligt att beskriva bakgrunden. \\
+8 & Skapa en representation för ``kameran''. \\
+9 & Implementera algoritmer för att detektera skärning med de hittils implementerade formerna. \\
+10 & Rendera en enkel scen med enbart direkt ljus. \\
+11 & Lägg till stöd för reflekterande ytor. \\
+12 & Lägg till stöd för spekularitet och diffusion. \\
+13 & Lägg till stöd för genomskinliga material. \\
+14 & Implementera stöd för polygonmodeller. \\
+15 & Lyckas med att importera något enkelt format för att beskriva polygoner. \\
+16 & Lyckas rendera en enkel polygon modell. \\
+17 & Lägg till möjligheten att använda en bild som bakgrund. \\
+\hline
+\end{tabular}
+
+\section{Utveckling}
+Under utvecklingsarbetet användes git, emacs, och IntelliJ IDEA. Till
+en mindre grad användes även Eclipse, som emacsserver, samt Netbeans
+för viss optimering.
+
+\section{Implementationsbeskrivning}
+\subsection{Milstolpar}
+\paragraph{1. Skriva bild till disk.}
+Helt genomförd. Använder inte Javas standardbibliotek.
+
+\paragraph{2. Planera på papper}
+Genomfört och arkiverat i \url{/dev/null}
+
+\paragraph{3. Implementera grundläggande datatyper och klasser}
+Helt genomfört, se \texttt{Vector3, Coordinate3, Ray, Normal}
+
+\paragraph{4. Gör det möjligt att beskriva scener}
+Helt genomfört. Se \texttt{doc/sc\_format\_specification.sc} och
+\texttt{SceneParser}.
+
+\paragraph{5. Skapa klasser för sfärer och plan}
+Helt genomfört. Se \texttt{Shape, AbstractShape, Sphere, Plane, Triangle, Mesh}.
+
+\paragraph{6. Ljuskällor}
+Helt genomfört. Stöd för volymeriska ljuskällor. Stöd för punktljus
+saknas, men var inte heller planerat. Se \texttt{LightMaterial}.
+
+\paragraph{7. Bakgrund}
+Helt genomfört. Kan beskrivas med antingen fast färg eller valfri bild
+som kan läsas av Javas standardbibliotek. Se \texttt{Background}.
+
+\paragraph{8. Skapa en representation för kameran}
+Delvis genomförd. Kameran är låst till origo. Se \texttt{Camera,
+  CameraWorker}.
+
+\paragraph{9. Algoritmer för skärning}
+Helt genomfört.
+
+\paragraph{10. Rendera med enbart direkt ljus}
+Inte implementerat, då denna punkt är delvis ogiltig i en pathtracer.
+
+\paragraph{11. Reflekterande ytor}
+Helt genomfört. Se \texttt{MirrorMaterial}.
+
+\paragraph{12. Spekularitet och diffusion}
+Helt genomfört. Finns enbart stöd för perfekt spekularitet och perfekt
+diffusion. Viss begreppsförvirring här i de ursprungliga milstolparna.
+Se \texttt{DiffuseMaterial, MirrorMaterial}.
+
+\paragraph{13. Refraktion}
+Delvis genomfört. Lambert-Beers lag är inte implementerad, så färgat
+glas kommer inte bete sig fysiskt korrekt. Ser snyggt ut däremot.
+Se \texttt{RefractiveMaterial}.
+
+\paragraph{14. Polygonmodeller}
+Helt genomfört. Stöd för någon slags acceleration saknas dock, så
+skärningstest sker med $O(n)$. Se \texttt{MeshShape}.
+
+\paragraph{15. Import av polygonmodell}
+Helt genomfört. Import av \texttt{.raw} filer stöds. Enbart trianglar stöds.
+Se \texttt{MeshShape}.
+
+\paragraph{16. Rendera polygonmodell}
+Helt genomfört, men \emph{låååångsamt} då rendering sker i $O(n)$. Med
+någon slags acceleration kan detta fås till $O(log n)$, men detta är
+långt utanför projektets tidsramar.
+
+\paragraph{17. Bild som bakgrund}
+Helt genomfört. Se 7.
+
+\subsection{Dokumentation för programkod}
+\subsubsection{Grov översikt}
+En parser, \texttt{SceneParser}, läser av scenbeskrivningen och skapar
+en \emph{kamera}, \texttt{Camera}, samt en \emph{scen},
+\texttt{Scene}. Utifrån detta skapas en \emph{renderare},
+\texttt{Renderer}. Renderaren är ansvarig för att styra kameran,
+skriva till disk, samt vid behov avsluta renderingen när den är
+klar. Kameran är ansvarig för att hålla ordning på renderingsresultat
+hittils, samt köra renderingspass på begäran av renderaren. Kameran
+frågar scenen vad en viss stråle borde ha för påverkan på
+bilden. Scenen ansvarar för att ta emot en stråle från kameran och
+pathtracea den. Scenen innehåller olika föremål, \texttt{Shape}, som
+dessutom har material, \texttt{Material}.
+
+\subsubsection{Hur programmet startar}
+Programmets huvudsakliga ingångsfunktion är \texttt{main(String[]
+  args)} i klassen \texttt{Main}. Det enda som görs här är att be
+\texttt{SceneParser} att läsa scenfilen, för att sedan be renderaren
+som fås tillbaka att rendera bilden.
+
+\texttt{SceneParser} läser genom scenbeskrivningen och skapar en
+\texttt{Renderer}. För nödvändiga värden som inte ges i
+scenbeskrivningen används standardvärden. Först skapas en
+\texttt{Scene} och en \texttt{Camera}, varefter renderaren skapas.
+
+\subsubsection{Hur renderingen går till}
+Renderaren renderar antingen upp till ett bestämt antal pass eller för
+evigt. Renderaren kommer begära att kameran renderar några pass,
+\texttt{writeInterval}, för att sedan skriva resultatet till
+disk. Renderaren håller även koll på renderingstider.
+
+\texttt{Camera} är en viktig klass, då den ansvarar för att hålla
+ordning på bilden, samt distribuera ut arbete till flera
+\texttt{CameraWorker}s. \texttt{Camera} delar upp varje pass i lika
+många delar som det finns \texttt{CameraWorkers}. Dessa är oftast lika
+många som antalet processorkärnor som Java kan se. \texttt{Camera}
+kommer köa upp det begärda antalet pass, och sedan vänta tills alla
+\texttt{CameraWorker}s är klara med sitt arbete. Arbetsuppgifter
+skickas med \texttt{CameraJob} i en \texttt{BlockedQueue}, och
+bekräftelse på att jobbet är utfört fås tillsammans med lite
+information om lyckade och totala traces i en
+\texttt{TraceResult}. \texttt{CameraWorkerInfo} används för att begära
+att alla \texttt{CameraWorker}s ska avslutas.
+
+Information om hur renderingen ser ut hittils hålls i en
+endimensionell array av \texttt{Radiance}. \texttt{Radiance} används
+både vid spårning och lagring. Vid lagring används medelvärdet av alla
+\texttt{Radiance} som har spårats till pixeln. Vid spårning påverkas
+färg och intensitet hos \texttt{Radiance} av de material som träffats.
+
+\subsubsection{Hur skrivning fungerar}
+\texttt{Renderer} anropar \texttt{Camera.render()}, som i sin tur ber
+sin \texttt{Output} att skriva till disk. \texttt{Output} kommer i sin
+tur använda en \texttt{Tonemapper} för att tonmappa varje pixel innan
+bilden i helhet skrivs till disk i \texttt{.ppm} format.
+\footnote{\url{http://netpbm.sourceforge.net/doc/ppm.html}}
+
+\subsubsection{Hur spårningen fungerar}
+En \texttt{CameraWorker} kommer fråga scenen efter \texttt{Radiance}
+för varje pixel genom funktionen
+\texttt{Scene.pathtrace()}. \texttt{pathtrace()} kommer iterera över
+alla objekt i scenen för att hitta den närmaste
+skärningspunkten. Detta sker i $O(n)$. Vid skärning beräknas en ny
+stråle samt materialets påverkan på \texttt{Radiance}. Detta upprepas
+tills man träffar en ljuskälla, eller slumpen avslutar spårningen.
+Eftersom nya värden för \texttt{Radiance} beräknas med hjälp av
+multiplikation, och multiplikation är kommutativt så spelar det ingen
+roll om man räknar ut total \texttt{Radiance} för spårningen på väg
+till ljuskällan eller ifrån ljuskällan. Därmed kan spårningen köras
+helt iterativt, utan att man behöver lagra hela spårningen från kamera
+till ljuskälla.
+
+Ett \texttt{Material} ska tillhandahålla \texttt{getRandomRay()} och
+\texttt{applyToRadiance()}. Den förstnämnda beräknar en ny slumpad
+stråle från materialet med lämplig
+distribution. \texttt{applyToRadiance()} förändrar den
+\texttt{Radiance} som används vid spårningen enligt materialets
+egenskaper. Ofta appliceras bara en färg.
+
+En \texttt{Shape} ska tillhandahålla \texttt{intersection()} samt
+\texttt{getMaterial()}. \texttt{intersection()} beräknar
+skärningspunkten och returnerar en \texttt{IntersectionInfo} som
+innehåller nödvändig info för fortsatt spårning.
+
+\subsubsection{Allmänna klasser}
+\paragraph{Coordinate3}
+Används för att representera koordinater i rummet. Har få metoder, och
+konverteras ofta till en \texttt{Vector3} vid beräkningar.
+
+\paragraph{Vector3}
+Används för nästan alla matematiska beräkningar. Innehåller diverse
+matematiska funktioner. Skulle sett snyggare ut med operator overloading.
+
+\paragraph{Normal}
+Subklass till \texttt{Vector3} som används när man vill garantera att
+en vektor är normaliserad.
+
+\paragraph{Ray}
+Stråle, alltså en \texttt{Coordinate3} och en
+\texttt{Vector3}. Vektordelen av strålen normaliseras då \texttt{Ray}
+initialiseras. \texttt{Ray} har också en tagg för att märka strålar
+som färdas inuti någonting. Detta används vid refraktion.
+
+\paragraph{RayMath}
+Verktygsklass med några funktioner för generering av nya strålar samt
+reflektans.
+
+\paragraph{RandomGen}
+Simpel slumptalsgenerator som används istället för den i standardbiblioteket.
+
+\subsection{Användning av fritt material}
+Kodmässigt har ingenting utanför Javas standardbibliotek använts. Vid
+rendering har dock några modeller från Stanford använts.
+\footnote{\url{http://www-graphics.stanford.edu/data/3Dscanrep/}} De
+av Stanfords modeller jag har använt hämtades från
+\url{http://graphics.cs.williams.edu/data/meshes.xml}, då dessa
+modeller är i ett för mig enklare filformat samt till viss del
+förbättrade.
+
+3D programmet Blender har använts som verktyg för modellering och
+konvertering samt till viss del referens. Blenders standardmodell
+\emph{Suzanne} har använts.
+
+\subsection{Designmönster som använts}
+\subsubsection{Producer/Consumer}
+Detta mönster används i \texttt{Camera} (producer) och
+\texttt{CameraWorker} (consumer). \texttt{Camera} producerar
+renderingsuppgifter (\texttt{CameraJob}) som \texttt{CameraWorker}
+sedan konsumerar och renderar.
+
+Fördelen med att använda detta mönster var att det gav ett relativt
+enkelt sätt att implementera och kontrollera parallellismen på. Tyvärr
+är det fortfarande ganska komplext jämfört med vissa funktioner i
+andra språk. Användandet av \texttt{BlockingQueue} tillsammans med
+Producer/Consumer resulterar också i att det blir svårt att utnyttja
+all processorkraft till fullo.
+
+\subsubsection{Observer}
+Observer används i \texttt{CameraObserver, Output, Camera}. Genom att
+använda Observer slipper man bry sig om att manuellt begära en
+skrivning till disk i övrig kod. Så fort kameran är klar informeras
+alla registrerade observatörer, så att de kan skriva till disk, eller
+möjligtvis visa upp resultatet på skärmen i framtiden.
+
+Utan Observer hade jag helt enkelt kallat på de korrekta funktionerna
+manuellt när \texttt{Camera} blir klar.
+
+\subsubsection{Strategy}
+Strategy används i \texttt{Shape}, där man ger en \texttt{Material}
+till konstruktorn.  Detta ger fördelen att användare av \texttt{Shape}
+inte behöver bry sig om hur \texttt{Material} fungerar.
+
+Utan detta mönster hade man skapat komplexitet i och med att
+användaren av \texttt{Shape} i så fall behöver få tillgång till den
+\texttt{Material} som hör till denna \texttt{Shape}.
+
+
+\subsection{Användning av objektorientering}
+\paragraph{1. Interface}
+Interface används väldigt mycket i mitt projekt. Alla material och
+shapes implementerar interfaces (\texttt{Material}, \texttt{Shape},
+paketen \texttt{material} och \texttt{shape}). Detta gör att jag kan
+behandla dessa väldigt generellt i stora delar av koden. Utan
+objektorientering hade jag troligtvis löst detta med hjälp av en
+touple av closures, då dessa bara implementerar rena funktioner, och
+alltså egentligen inte behöver modifieras efter skapande.
+
+\paragraph{2. Ärvning}
+\texttt{Normal} ärver nästan all sin funktionalitet från
+\texttt{Vector3}. \texttt{Normal} behöver därmed bara implementera
+konstruktorer. Detta innebär att man har ett sätt att särskilja
+normaliserade vektorer från vanliga vektorer, utan att förlora
+kompabilitet och utan att skriva onödigt mycket kod. I ett
+icke-objektorienterat språk skulle jag ha normaliserat manuellt,
+alternativt skapat en separat typ för normaliserade vektorer. Detta
+skulle inte ha varit något större problem då jag skulle ha använt
+immutables och operator overloading.
+
+\paragraph{3. Abstrakta klasser}
+\texttt{AbstractShape} innehåller kod för att hålla ordning på
+material. Trots att detta bara är några rader undviker man onödig
+kodduplicering i fyra andra klasser. I ett icke objektorienterat språk
+skulle jag ha löst detta med ett makro eller en template av något
+slag.
+
+
+\subsection{Designbeslut}
+\paragraph{1. Skriva en egen slumptalsgenerator}
+För att få vettig prestanda i en flertrådad pathtracer krävs att man
+\emph{mycket} snabbt kan generera slumptal. Dessutom ville jag kunna
+köra på Java 6, då jag hade tillgång till kraftfulla maskiner med
+enbart Java 6. \texttt{Math.random()} ger slumpade tal mellan 0.0 och
+1.0. Den fungerar bra entrådat, men flertrådat skapar den en flaskhals
+av låsningar eftersom att den använder sig av \texttt{Random}. Alltså,
+all slumptalsfunktionalitet i Java är trådsäker. Ett alternativ är att
+skapa nya \texttt{Random} vid behov. Detta är dock slöseri med
+resurser. Ett annat alternativ är att skicka med en \texttt{Random} i
+funktionsanrop. Detta blir mycket onödig
+spagettikod. \texttt{ThreadLocal} skulle kunna användas, men detta
+introducerar nya klasser och mycket kod. Dessutom lär prestandan
+minska.
+
+Därför skrev jag min egen slumptalsgenerator, \texttt{RandomGen}. Den
+använder ingen låsning, och är därmed snabb, men
+ickedeterministisk. Eftersom att en ickedeterministisk
+slumptalsgenerator fortfarande avger slumptal är det inte ett problem
+för en pathtracer. I praktiken fungerar den mycket bra. Kvaliteten på
+slumptalen är tillräckligt bra för min pathtracer. Denna lösning är
+helt klart den enklaste och snabbaste, med enbart 14 rader kod, två
+multiplikationer, en addition och en modulo per slumptal.
+
+\paragraph{2. null}
+På många platser i koden använder jag mig av null för att signalera
+misslyckanden. Detta gör jag för att slippa skapa nya objekt i
+relativt tajta loopar, till exempel i \texttt{for (Shape shape :
+  shapes)} loopen i \texttt{Scene}, där \texttt{Shape.intersection()}
+kan returnera null. Jag använder det även i till exempel material för
+att signalera att \texttt{Material.getRandomRay()} inte ger upphov
+till nya strålar. Här används det dock mest för att slippa lägga till
+onödiga fält i \texttt{Ray}.
+
+Istället för att använda null hade jag kunnat lägga till flaggor i
+relevanta klasser. Detta hade dock blivit långsammare och fulare kod.
+
+\paragraph{3. SceneParser}
+Klassen \texttt{SceneParser} är den i särklass längsta klassen, och
+även den klass som får flest varningar vid inspections. Den ser ut som
+den gör för att jag inte vill dela upp den. Eftersom klassen bara
+läser ur en textfil ville jag kod som trots att den blev lång skulle
+vara enkel att läsa.
+
+Om man läser koden med specifikationen uppe brevid så kommer man kunna
+läsa hela koden uppifrån och ner utan problem. Det är någonting man
+inte skulle kunna göra med vissa andra upplägg.
+
+Det går säkert att korta ner koden, men jag tvivlar på att den går att
+skriva på ett sätt som är enklare att förstå genom att dela upp den.
+
+\paragraph{4. Returprodukt från consumer/producer}
+För att få kontroll över hur mycket som renderas i taget, samt
+``låsa'' renderingen innan skrivning så väntar \texttt{Camera} på att
+alla \texttt{CameraWorker}s ska bli klara innan skrivning till
+disk. Dessutom får man tillfälle att samla ihop information från
+arbetarna.
+
+Detta betyder att det kommer finnas tillfällen då alla
+processorkärnor inte utnyttjas till max vid tillfällen runt
+skrivning. Detta skulle kunna ändras till att alla
+\texttt{CameraWorkers} släpps fria, och man låter dem rendera så
+mycket de bara kan, utan någon kontroll, varefter man skriver till
+disk från en annan tråd med vissa tidsintervall. Jag ville dock ha den
+kontroll det gav att använda Consumer/Producer.
+
+\paragraph{5. Implementera \texttt{Color} separat från \texttt{Radiance}}
+På ytan ser \texttt{Color} och \texttt{Radiance} väldigt lika ut, men
+eftersom \texttt{Color} och \texttt{Radiance} gör så olika saker
+använder de sig inte av varandra. \texttt{Radiance} skulle till
+exempel kunna ha varit implementerad med hjälp av \texttt{Color}, men
+detta skulle ha lett till problem, då \texttt{Color} enbart har fält
+som är \texttt{final}.
+
+\paragraph{6. Användning av iteration i pathtracingfunktionen}
+Om man tittar tillbaka på historiken i git ser man att jag använde mig
+av en rekursiv \texttt{Scene.pathtrace()}. Jag ändrade den till en
+iterativ version för att få koden mer ``samlad''. Den rekursiva
+versionen krävde fler funktionsanrop till många olika ställen och
+klasser. Dessutom blev det mycket enklare att implementera rysk
+roulette i den iterativa versionen än i den rekursiva.
+
+\paragraph{7. Skriva egen kod för att skriva bild till disk}
+Jag har skrivit egen kod för att spara ner bilden till disk
+(\texttt{Output, Tonemapper}. Jag tänkte använda
+\texttt{BufferedImage} tills jag såg typdefinitionen
+\texttt{setRGB(int x, int y,} \textbf{int} \texttt{rgb)}. Då uppfinner
+jag hellre hjulet på nytt och får 16-bit output på köpet.
+
+\paragraph{8. Skapa aldrig nya \texttt{Radiance}}
+Ett prestandaproblem som upptäcktes med Netbeans profiler var att på
+tok för många \texttt{Radiance} skapades, vilket ledde till mycket
+jobb för garbage collektorn. Detta har nu ändrats så att mjukvaran
+aldrig skapar fler \texttt{Radiance}, genom att varje
+\texttt{CameraWorker} har en egen som den skickar vidare till
+\texttt{Scene}, som i sin tur nollställer den, arbetar med den och
+returnerar. Detta ledde till att koden blev en aning mer komplicerad,
+men garbage collectorn gick från att ta 20\% av processortiden till
+att ta >10\%. Även Vector3 skapas i överflöd, detta skulle kunna
+avhjälpas med en Vector3Pool.
+
+\section{Användarmanual}
+\begin{verbatim}
+$ java -jar PathTracer.jar inputScene.sc outputImage.ppm
+\end{verbatim}
+Och det är allt den kan göra. För att öppna filerna rekommenderas
+varmt \texttt{feh -R 5 outputImage.ppm} eller Gimp. För att konvertera
+till andra filformat kan imagequick användas:
+\begin{verbatim}
+$ convert outputImage.ppm outputImage.png
+\end{verbatim}
+Observera att varken feh eller Gimp klarar av att öppna 16-bit output
+ppm. För att se resultatet måste det först konverteras med imagequick.
+
+\subsection{Scenbeskrivning}
+Scener beskrivs enligt \texttt{doc/sc\_format\_specification.sc}. Man
+bör observera följande: Kameran är fixerad i origo. Uppåt i bilden är
+positiv $x$-led. Höger i bilden är positiv $y$-led. Innåt i bilden är
+positiv $z$-led. Detta skiljer sig från flertalet 3D program, och kan
+ställa till vissa problem. För att importera \texttt{.raw} filer bör
+man först se till så att man bara har trianglar.
+
+Det finns några exempel i \texttt{scenes/}. Dessa kan renderas som
+beskrivet ovan. Dessutom finns exempel på renderingar i
+\texttt{renders/}. Observera att vissa renderingar saknar motsvarande
+scenbeskrivning i \texttt{scenes/}, då de har blivit renderade med
+hårdkodade scenbeskrivningar.
+
+\todo{Bilder HÄR.}
+
+
+\section{Betygsambitioner}
+Förhoppningen är att få en fyra eller femma.
+
+\section{Utvärdering och erfarenheter}
+Projektet har varit väldigt roligt att skriva. Samtidigt som Java är
+helt fel språk att skriva en pathtracer i så är själva pathtracing
+algoritmen väldigt rolig att implementera tillsammans med allt som
+krävs runtomkring. Jag har lagt ner aningen för mycket tid på det här
+projektet, men det hade jag förväntat mig.
+
+Pathtracing är något som jag tycker att är mycket intressant, och jag
+kommer nog fortsätta skriva på en pathtracer i sommar. Fast inte i
+Java. Java är verkligen helt fel språk för en pathtracer. Inte för att
+Java gör det jättedåligt, utan mer för att andra språk kan göra det så
+mycket bättre. Jämför till exempel med smallpt, nämnt i
+inledningen. Där implementeras paralellism med OpenMP och ett
+kompilatorpragma. En rad, jämfört med mina fyra extra klasser i Java,
+implementerar paralell pathtracing.
+
+Något jag har haft problem med är att överlåta kompileringen till
+IDEA. Samtidigt som jag gärna slipper ta hand om kompileringen själv
+tycker jag att IDEA har bråkat på tok för mycket om småsaker. Vägrar
+kompilera vissa filer, kompileringsfel som plötsligt försvinner utan
+anledning, och så vidare. Av detta har jag lärt mig att man inte ska
+lita på något IDE förrän de har bevisat att de duger.
+
+\paragraph{Tips}
+\begin{itemize}
+\item Skriv en pathtracer, det är roligt.
+\item Få in designmönstren i koden så snabbt som möjligt.
+\item Man kan skriva andra saker än spel.
+\end{itemize}
+
+\paragraph{Förbättringar till kursen}
+\begin{itemize}
+\item Se till så att alla dokument finns som
+  \texttt{.pdf} också. Alla kan inte läsa \texttt{.odt}.
+\item Gärna mer information på föreläsningar om hur man hanterar lite
+  större projekt, versionshantering, tester, etc.
+\end{itemize}
+
+
+\end{document}
