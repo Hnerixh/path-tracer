@@ -1,6 +1,6 @@
 package ax.hx.hx.pathtracer.pathtracer.shape;
 
-import ax.hx.hx.pathtracer.pathtracer.AbstractShape;
+import ax.hx.hx.pathtracer.pathtracer.Material;
 import ax.hx.hx.pathtracer.pathtracer.color.IntersectionInfo;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
 import ax.hx.hx.pathtracer.pathtracer.math.Normal;
@@ -26,7 +26,7 @@ public class PlaneShape extends AbstractShape
         Vector3 p0 = new Vector3(ray.getOrigin());
 
         double a = - (p0.dotProduct(planeNormal)) - d;
-        double b = v.dotProduct(planeNormal);
+        double b = v.dotProduct(planeNormal);     // IDEA ANTIWARNING b = blue
 
         // We are facing straight towards the edge of the plane, and
         // will not intersect.
@@ -57,7 +57,8 @@ public class PlaneShape extends AbstractShape
         return new IntersectionInfo(ray, normal, intersect);
     }
 
-    public PlaneShape(Normal normal, Coordinate3 coord){
+    public PlaneShape(Normal normal, Coordinate3 coord, Material material){
+	this.setMaterial(material);
         this.planeNormal = normal;
         this.coord = coord;
     }

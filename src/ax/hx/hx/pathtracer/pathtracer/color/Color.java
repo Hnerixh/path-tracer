@@ -7,7 +7,7 @@ public class Color
 {
     public final double r;
     public final double g;
-    public final double b;
+    public final double b;     // IDEA ANTIWARNING b = blue
     public Color(double r, double g, double b){
 	this.r = r;
 	this.g = g;

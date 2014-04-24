@@ -31,9 +31,9 @@ public final class RayMath
            do {
 	    // IDEA ANTIWARNING
 	    // This is okay, we want a number in [-1.0,1.0].
-            rx = Rand.rand() * 2.0 - 1.0;
-            ry = Rand.rand() * 2.0 - 1.0;
-            rz = Rand.rand() * 2.0 - 1.0;
+            rx = RandomGen.rand() * 2.0 - 1.0;
+            ry = RandomGen.rand() * 2.0 - 1.0;
+            rz = RandomGen.rand() * 2.0 - 1.0;
           } while((! insideUnitSphere(rx, ry, rz)) || isZeroVector(rx, ry, rz));
         // We need to remove the zero vector to avoid division by zero
         // in the normalization step.
@@ -65,24 +65,33 @@ public final class RayMath
         double n2 = indexOfRefraction;
         if (ray.isInsideSomething()){
             n2 = 1; n1 = indexOfRefraction;
-            double n = n1/n2;
+            double n = n1/n2; // IDEA ANTIWARNING n = index of refraction
 
             // If so, use the angle from the normal to the other ray.
-            double sin2Theta = n*n* (1- cosTheta*cosTheta);
-            cosTheta = Math.sqrt(1-sin2Theta);
+            double sin2Theta = n*n*(1 - cosTheta*cosTheta);
+            cosTheta = Math.sqrt(1 - sin2Theta);
         }
-        double r0 = (n1-n2)/(n1+n2);
-	r0 *= r0;
+        double r0 = (n1-n2) / (n1+n2);
+	r0 *= r0; // IDEA ANTIWARNING The variable is squared, not assigned to itself.
         double x = 1 - cosTheta;
         return r0 + (1-r0) * x * x * x * x * x;
     }
 
-// --Commented out by Inspection START (4/7/14 12:45 PM):
-//    public static Ray newRayFromNormal(Normal normal, Coordinate3 origin){
-//        return new Ray(origin, normal);
-//    }
-// --Commented out by Inspection STOP (4/7/14 12:45 PM)
+    public static Ray reflectedRay(Ray ray, Normal normal, Coordinate3 origin){
+        // This is not really a random ray, this is a mirror...
+        //
+        Vector3 vec = new Vector3(ray.getVector());
+        vec.normalize();
 
+        Vector3 norm = new Vector3(normal);
+
+        norm.scale(2*(norm.dotProduct(vec)));
+
+        norm.subtract(vec);
+        norm.negate();
+        norm.normalize();
+        return new Ray (origin, norm, ray.isInsideSomething());
+    }
 
     private static boolean insideUnitSphere(double x, double y, double z){
         return (x*x + y*y + z*z <= 1);

@@ -1,5 +1,7 @@
 package ax.hx.hx.pathtracer.pathtracer.camera;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -13,36 +15,35 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
   */
  public class Camera
  {
-     private Scene scene;
-     private int width;
-     private int heigth;
-     private int size;
-     private double focalLength;
-     private Radiance[] radiances;
-     private int renderDepth;
+     private final Scene scene;
+     private final int width;
+     private final int heigth;
+     private final int size;
+     private final double focalLength;
+     private final Radiance[] radiances;
+     private final int renderDepth;
      private long totalTraces = 0; // Fun overflow after 1.5 hours if it happens to be an int.
      private long totalSuccesfulTraces = 0;
      private boolean hasWorkers = false;
-     private double RRratio; // ANTIWARNING RR = Russian Roulette
-     private Output output;
+     private final double rrRatio;
+     private List<CameraObserver> observers = new ArrayList<CameraObserver>();
 
      private final CameraWorkerInfo killswitch = new CameraWorkerInfo();
      private int workers = 2;
 
-     private BlockingQueue<CameraJob> jobQueue;
-     private BlockingQueue<TraceResult> resultQueue;
+     private final BlockingQueue<CameraJob> jobQueue;
+     private final BlockingQueue<TraceResult> resultQueue;
 
-     // ANTIWARNING, see above
-     public Camera(Scene scene, double focalLength, Output output, int renderDepth, double RRratio, int workers){
+     // ANTIWARNING Russian Roulette Ratio
+     public Camera(Scene scene, int width, int heigth, double focalLength, int renderDepth, double rrRatio, int workers){
          this.scene = scene;
-         this.width = output.getXsize();
-         this.heigth = output.getYsize();
+         this.width = width;
+         this.heigth = heigth;
          this.size = width * heigth;
          this.focalLength = focalLength;
-         this.output = output;
          this.renderDepth = renderDepth;
          this.workers = workers;
-         this.RRratio = RRratio;
+         this.rrRatio = rrRatio;
 
          jobQueue = new ArrayBlockingQueue<CameraJob>(size);
          resultQueue = new ArrayBlockingQueue<TraceResult>(size);
@@ -64,7 +65,7 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
      private void createWorkers(){
 	 for (int i = 0; i < workers; i++) {
 	     CameraWorker worker =
-		     new CameraWorker(jobQueue, resultQueue, renderDepth, RRratio, scene, killswitch, width, heigth,
+		     new CameraWorker(jobQueue, resultQueue, renderDepth, rrRatio, scene, killswitch, width, heigth,
 				      focalLength, radiances);
 	     Thread workerThread = new Thread(worker);
 	     workerThread.start();
@@ -95,8 +96,14 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
          }
      }
 
-     public void render(){
-          output.output(radiances);
+     public void addObserver(CameraObserver observer){
+	 observers.add(observer);
+     }
+
+     public void notifyObservers(){
+	 for (CameraObserver observer : observers){
+	     observer.passDone(radiances);
+	 }
      }
 
 
@@ -106,16 +113,19 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
                 TraceResult res = resultQueue.take();
                 totalSuccesfulTraces += res.succesfulTraces;
                 totalTraces += res.traces;
-                double hitratio = (100.0 * totalSuccesfulTraces / totalTraces);
+		 // IDEA ANTIWARNING
+		 // Someone told me IDEA did not warn for even powers of 10.
+		 // They were wrong.
+                double hitpercent = (100.0 * totalSuccesfulTraces / totalTraces);
                 double spp = (totalTraces / (double) size); // Traced samples per pixel
-                double realSpp = spp * hitratio / 100.0; // Actual emitter hits per pixel
+                double realSpp = spp * hitpercent / 100.0; // Actual emitter hits per pixel
                 System.out.println("Traces per pixel: " + spp);
                 System.out.println("Samples per pixel: " + realSpp);
-                System.out.println("Hit probability: " + hitratio + "%");
+                System.out.println("Hit probability: " + hitpercent + "%");
                 System.out.println("-------------");
              }
          }
-         catch (InterruptedException e) { System.out.println("Sorry, the camera got interrupted");}
+         catch (InterruptedException e) { e.printStackTrace();}
      }
 
      public void doPasses(int passes){
@@ -124,5 +134,10 @@ import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
           }
              queuePasses(passes);
              waitForWorkers(passes);
+		notifyObservers();
+     }
+
+     public void kill(){
+	 killswitch.kill();
      }
  }

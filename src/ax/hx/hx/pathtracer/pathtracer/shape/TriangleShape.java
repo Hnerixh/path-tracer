@@ -1,6 +1,6 @@
 package ax.hx.hx.pathtracer.pathtracer.shape;
 
-import ax.hx.hx.pathtracer.pathtracer.AbstractShape;
+import ax.hx.hx.pathtracer.pathtracer.Material;
 import ax.hx.hx.pathtracer.pathtracer.color.IntersectionInfo;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
 import ax.hx.hx.pathtracer.pathtracer.math.Normal;
@@ -18,7 +18,8 @@ class TriangleShape extends AbstractShape
     private Vector3 c3;
     private static final double EPSILON = 0.000001;
 
-    TriangleShape(Coordinate3 c1, Coordinate3 c2, Coordinate3 c3){
+    TriangleShape(Coordinate3 c1, Coordinate3 c2, Coordinate3 c3, Material material){
+	this.setMaterial(material);
         this.c1 = new Vector3(c1);
         this.c2 = new Vector3(c2);
         this.c3 = new Vector3(c3);

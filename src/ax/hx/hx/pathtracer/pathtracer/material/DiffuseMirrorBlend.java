@@ -24,7 +24,7 @@ public class DiffuseMirrorBlend implements Material {
         this.mirror = new MirrorMaterial(color);
     }
     public Ray getRandomRay(Ray ray, Normal normal, Coordinate3 origin){
-        if (Rand.rand() > RayMath.reflectance(normal, ray, ratio)){
+        if (RandomGen.rand() > RayMath.reflectance(normal, ray, ratio)){
             return diffuse.getRandomRay(ray, normal, origin);
         }
         else {

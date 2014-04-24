@@ -3,7 +3,7 @@ package ax.hx.hx.pathtracer.pathtracer.camera;
 import ax.hx.hx.pathtracer.pathtracer.Scene;
 import ax.hx.hx.pathtracer.pathtracer.color.Radiance;
 import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
-import ax.hx.hx.pathtracer.pathtracer.math.Rand;
+import ax.hx.hx.pathtracer.pathtracer.math.RandomGen;
 import ax.hx.hx.pathtracer.pathtracer.math.Ray;
 import ax.hx.hx.pathtracer.pathtracer.math.Vector3;
 
@@ -26,12 +26,12 @@ class CameraWorker implements Runnable {
     private final int width;
     private final int heigth;
     private final Radiance[] radiances;
-    private final double RRratio; // ANTI WARNING RR = Russian Roulette
+    private final double rrRatio;
 
     CameraWorker(BlockingQueue<CameraJob> jobQueue,
                  BlockingQueue<TraceResult> resultQueue,
                  int traceDepth,
-                 double RRratio,
+                 double rrRatio, // ANTI WARNING Russian Roulette Ratio
                  Scene scene,
                  CameraWorkerInfo killswitch,
                  int width,
@@ -48,13 +48,13 @@ class CameraWorker implements Runnable {
         this.heigth = heigth;
         this.focalLength = focalLength;
         this.radiances = radiances;
-        this.RRratio = RRratio;
+        this.rrRatio = rrRatio;
     }
 
     public void run() {
 	Radiance radiance = new Radiance(1.0, 1.0, 1.0);
         while (true) {
-            if (killswitch.shouldDie()){
+            if (killswitch.shouldDie()){ //TODO fixa buggen
                 return;
             }
             try {
@@ -63,11 +63,11 @@ class CameraWorker implements Runnable {
                 int succesfulTraces = 0;
                 for (int i = job.start; i < job.end; i++) {
                     traces++;
-                    radiance = scene.pathtrace(rayForPixel(i), depth, RRratio, radiance);
+                    radiance = scene.pathtrace(rayForPixel(i), depth, rrRatio, radiance);
                     if (radiance.discarded()){
                         continue; // IDEA ANTIWARNING "continue" with next pixel
                     }
-                    radiances[i].addInfluence(radiance);
+                    radiances[i].addRadiance(radiance);
                     succesfulTraces++;
                 }
                 resultQueue.put(new TraceResult(traces, succesfulTraces));
@@ -97,8 +97,8 @@ class CameraWorker implements Runnable {
         // This offsets the coordinates randomly within the pixel.
         // -> Don't need AA.
         double pixelSize = 1.0/scale;
-        x += pixelSize* Rand.rand();
-        y += pixelSize*Rand.rand();
+        x += pixelSize* RandomGen.rand();
+        y += pixelSize* RandomGen.rand();
 
         // Generate ray
         Vector3 vector = new Vector3(x, y, focalLength);

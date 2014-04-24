@@ -31,12 +31,13 @@ public class Background {
             image = ImageIO.read(file);
         } catch (IOException e) {
             image = null;
-            System.out.println("Could not load background image. Using dummy.");
+            e.printStackTrace();
         }
         width = image.getWidth();
         heigth = image.getHeight();
     }
 
+    // IDEA ANTIWARNING b = blue
     public Background(double r, double g, double b){
         color = new Color(r,g,b);
     }
@@ -77,9 +78,11 @@ public class Background {
         // So this is why I wrote my own image output module...
         // The normal non-stupid way did not want to play ball with me,
 	// so manual mode it is.
+	// This is neither nice nor correct, but rather funny.
+	// The 8 is not detected as a magic number, strange...
         double r = ((pixel & 0x00ff0000) >> 16);
         double g = ((pixel & 0x0000ff00) >> 8);
-        double b = (pixel & 0x000000ff);
+        double b = (pixel & 0x000000ff); // IDEA ANITWARNING b = blue
 
         r /= RANGE;
         b /= RANGE;

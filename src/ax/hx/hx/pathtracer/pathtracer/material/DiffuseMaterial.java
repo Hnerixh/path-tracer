@@ -20,23 +20,18 @@ public class DiffuseMaterial implements Material
 	this.color = color;
     }
 
-    DiffuseMaterial(){
-        // Make it plain white.
-        this.color = new Color(1,1,1);
-    }
     public Ray getRandomRay(Ray ray, Normal normal, Coordinate3 origin){
         return RayMath.newCosineImportanceWeightedRay(normal, origin, ray);
 	// return RayMath.newRayFromNormal(normal, origin);
     }
 
     public void applyToRadiance(Ray incoming, Ray outgoing, Normal normal, Radiance incomingRadiance){
-        // We already send out rays distributed by Lambert's cosine
-        // law, so just apply our color to incomingRadiance and pass
-        // along.
+        /*
+        We already send out rays distributed by Lambert's cosine
+        law, so just apply our color to incomingRadiance and pass
+        along.
+        */
 
-	// The following line is not part of this material, just a test
-	// incomingRadiance.factor(normal.dotProduct(outgoing.getVector()));
-
-        incomingRadiance.applyColor(color);
+	incomingRadiance.applyColor(color);
     }
 }

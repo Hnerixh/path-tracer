@@ -1,6 +1,6 @@
  package ax.hx.hx.pathtracer.pathtracer.shape;
 
- import ax.hx.hx.pathtracer.pathtracer.AbstractShape;
+ import ax.hx.hx.pathtracer.pathtracer.Material;
  import ax.hx.hx.pathtracer.pathtracer.color.IntersectionInfo;
  import ax.hx.hx.pathtracer.pathtracer.math.Coordinate3;
  import ax.hx.hx.pathtracer.pathtracer.math.Normal;
@@ -15,7 +15,8 @@
       private final Coordinate3 origin;
       private final double radius;
       private static final double EPSILON = 0.000001;
-      public SphereShape(Coordinate3 origin, double radius){
+      public SphereShape(Coordinate3 origin, double radius, Material material){
+	  this.setMaterial(material);
           this.origin = origin;
           this.radius = radius;
       }

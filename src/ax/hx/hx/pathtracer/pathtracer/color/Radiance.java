@@ -16,13 +16,15 @@ public class Radiance
 {
     private double r;
     private double g;
-    private double b;
+    private double b;     // IDEA ANTIWARNING b = blue
     private boolean nullInfluence = false;
 
     private int influencedBy = 0;
 
     // Initialize with r g b values
-    public Radiance(double r, double g, double b){
+    // IDEA ANTIWARNING
+    // User should choose the reset value, even when there is only one single user.
+    public Radiance(double r, double g, double b){     // IDEA ANTIWARNING b = blue
         this.r = r;
         this.g = g;
         this.b = b;
@@ -38,7 +40,7 @@ public class Radiance
     }
 
     // Reset to the equivalent of a new Radiance object, with the supplied colors
-    public void reset(double r, double g, double b){
+    public void reset(double r, double g, double b){     // IDEA ANTIWARNING b = blue
         this.r = r;
         this.g = g;
         this.b = b;
@@ -50,23 +52,23 @@ public class Radiance
         return nullInfluence;
     }
 
-    public void addInfluence(Radiance i){
+    public void addRadiance(Radiance radiance){
 	// Calculates the avarage of all hits.
-    if(i.nullInfluence){
+    if(radiance.nullInfluence){
         return;
     }
     if (this.nullInfluence){
-        r = i.r;
-        g = i.g;
-        b = i.b;
+        r = radiance.r;
+        g = radiance.g;
+        b = radiance.b;
         influencedBy ++;
         nullInfluence = false;
         return;
     }
 
-	r = (r*influencedBy + i.r)/(influencedBy + 1);
-	g = (g*influencedBy + i.g)/(influencedBy + 1);
-	b = (b*influencedBy + i.b)/(influencedBy + 1);
+	r = (r*influencedBy + radiance.r)/(influencedBy + 1);
+	g = (g*influencedBy + radiance.g)/(influencedBy + 1);
+	b = (b*influencedBy + radiance.b)/(influencedBy + 1);
 	influencedBy++;
     }
 

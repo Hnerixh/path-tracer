@@ -5,6 +5,9 @@ import java.io.File;
 /**
  * This is the simple main file.
  */
+
+// IDEA ANTIWARNING
+// The Main class has a main method. I don't see the problem.
 public final class Main {
     private Main() {}
 
