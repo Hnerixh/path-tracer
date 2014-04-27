@@ -86,14 +86,9 @@ public class MeshShape extends AbstractShape
         for (TriangleShape triangle : triangles){
             IntersectionInfo hit = triangle.intersection(ray);
 
-            if (hit == null){
-		// IDEA ANTIWARNING
-		// "continue" with the next triangle.
-                continue;
-            }
-
-            if (ray.getOrigin().distance(hit.hitCoord) < nearestHit
-                || ! hasHit){
+            if (hit != null
+		&& ( ray.getOrigin().distance(hit.hitCoord) < nearestHit
+                || ! hasHit)){
 		hasHit = true;
                 nearestHit = ray.getOrigin().distance(hit.hitCoord);
                 intersection = hit;

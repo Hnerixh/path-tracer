@@ -9,6 +9,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{hyperref}
 \usepackage{todonotes}
+\usepackage[swedish]{babel}
 
 \renewcommand{\contentsname}{Innehåll}
 
@@ -52,10 +53,22 @@ mest på grund av att stöd för texturer saknas. Den lyckas dock mäta
 sig med Open-Source renderaren
 Luxrender\footnote{\url{www.luxrender.net}} i vissa enklare
 scener. Prestandan är dock värdelös, ungefär 3-4 gånger långsammare än
-smallpt
+smallpt med liknande scenbeskrivningar.
 \footnote{\url{http://www.kevinbeason.com/smallpt/}}.
-\todo{Visa jämförelse}
 
+\begin{figure}
+  \begin{center}
+  \includegraphics[width=8cm]{cornell_box1}
+  \end{center}
+  \caption{Min pathtracer}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+  \includegraphics[width=8cm]{cornell_ref}
+  \end{center}
+  \caption{Luxrender referens}
+\end{figure}
 
 \section{Bakgrundsinformation}
 Pathtracing
@@ -129,7 +142,7 @@ en pathtracer.
 
 \begin{tabular}{|l|l|}
   \hline
-\# & Beskrivning (Kan innehålla svengelska) \\
+\# & Beskrivning \\
 \hline
 1 & Få java att skriva en bild till disk. \\
 2 & Planera på papper. \\
@@ -222,6 +235,16 @@ långt utanför projektets tidsramar.
 Helt genomfört. Se 7.
 
 \subsection{Dokumentation för programkod}
+
+\begin{figure}
+  \begin{centere}
+    \includegraphics[width=15cm]{diagram}
+  \end{centere}
+\caption{\\ 1. Förhållandet mellan \texttt{Material} och \texttt{Shape} \\
+  2. Vektorer, koordinater och strålar \\
+  3. Hur progammet är ihopkedjat \\
+  4. Hur output fungerar. }
+\end{figure}
 \subsubsection{Grov översikt}
 En parser, \texttt{SceneParser}, läser av scenbeskrivningen och skapar
 en \emph{kamera}, \texttt{Camera}, samt en \emph{scen},
@@ -509,6 +532,22 @@ men garbage collectorn gick från att ta 20\% av processortiden till
 att ta >10\%. Även Vector3 skapas i överflöd, detta skulle kunna
 avhjälpas med en Vector3Pool.
 
+
+\section{Filer}
+Dokumentation, samt de filer som krävs för att framställa
+dokumentationen finns i \texttt{doc/}. Källkod finns i
+\texttt{src/}. Renderingsresultat finns i \texttt{renders/}. Denna
+mapp innehåller de flesta lyckade renderingar av större vikt som
+gjorts. De flesta är dock renderade med hjälp av hårdkodade
+scenklasser i Java. Om dessa klasser är av intresse finns de i
+git-historiken. (ta kontakt så hittar jag exakta commits.) Några
+scenbeskrivningar finns i \texttt{scenes/}. För testrenderingar
+rekommenderas \texttt{cornell\_box.sc}, då denna visar upp mycket av
+funktionaliteten utan att vara för långsam att
+rendera. \texttt{dragon.sc} rekommenderas INTE att rendera, då en
+sådan rendering kommer ta \emph{minst} en natt på sig innan den är
+\emph{ igenkännbar }.
+
 \section{Användarmanual}
 \begin{verbatim}
 $ java -jar PathTracer.jar inputScene.sc outputImage.ppm
@@ -520,7 +559,13 @@ till andra filformat kan imagequick användas:
 $ convert outputImage.ppm outputImage.png
 \end{verbatim}
 Observera att varken feh eller Gimp klarar av att öppna 16-bit output
-ppm. För att se resultatet måste det först konverteras med imagequick.
+ppm. För att se resultatet måste det först konverteras med imagequick
+enligt ovan.
+
+IDEA klarar av att öppna \texttt{.ppm} filer i 8-bit format. Tyvärr
+tror IDEA att det kan öppna 16-bit filer också, vilket leder till
+mystiska resultat. (Någonslags konstig trunkering, förutom i extremt
+ljusa eller mörka områden.)
 
 \subsection{Scenbeskrivning}
 Scener beskrivs enligt \texttt{doc/sc\_format\_specification.sc}. Man
@@ -536,7 +581,28 @@ beskrivet ovan. Dessutom finns exempel på renderingar i
 scenbeskrivning i \texttt{scenes/}, då de har blivit renderade med
 hårdkodade scenbeskrivningar.
 
-\todo{Bilder HÄR.}
+\begin{figure}
+  \begin{center}
+  \includegraphics[width=8cm]{cornell_box2}
+  \caption{Cornell box med textur på vägg och golv, samt en grön boll
+    som är både matt och glansig.}
+  \end{center}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+  \includegraphics[width=8cm]{bunny.png}
+  \caption{Staford bunny. Tog på tok för lång tid att rendera.}
+  \end{center}
+\end{figure}
+
+
+\begin{figure}
+  \begin{center}
+  \includegraphics[width=8cm]{first_cornell}
+  \caption{Första vettiga bilden från min renderare.}
+  \end{center}
+\end{figure}
 
 
 \section{Betygsambitioner}
@@ -567,7 +633,8 @@ lita på något IDE förrän de har bevisat att de duger.
 
 \paragraph{Tips}
 \begin{itemize}
-\item Skriv en pathtracer, det är roligt.
+\item Skriv en pathtraceri Java, det är roligt. Java är helt fel språk för
+  det, och det är därför det blir roligt.
 \item Få in designmönstren i koden så snabbt som möjligt.
 \item Man kan skriva andra saker än spel.
 \end{itemize}

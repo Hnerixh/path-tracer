@@ -63,7 +63,7 @@ final class SceneParser {
 	IDEA ANTIWARNING
 	long and descriptive.
 	In the rest of the code this is refeered to as rrRatio.
-	Want to clarify that it is the propability of death.
+	Want to clarify in the parser that it is the propability of death, not life.
 	*/
 	double russianRouletteDeathProbability = 1.0;
         int depth = 3;
@@ -98,11 +98,9 @@ final class SceneParser {
 
 	// ----------------- Parse ----------------------
         /*
-	Read scene info
+	------------ Read scene info ----------------------
 	IDEA ANTIWARNING
 	I find this easy to read.
-	IDEA ANTIWARNING II
-	Continue? Yes. A lot prettier than if-else in my eyes for this scenario.
 	*/
 	while ((line = readLine()) != null
                && (!line.equals("materials"))) {
@@ -112,6 +110,10 @@ final class SceneParser {
                 xSize = Integer.parseInt(lineParts[1]);
                 ySize = Integer.parseInt(lineParts[2]);
                 continue;
+		// IDEA ANTIWARNING
+		// Will only comment on the first occurance of continue in this file.
+		// In my humble opinion this is nicer than using an a gigantic if-else construct.
+		// A case construct won't work because a.) using Java 6, b.) line.startsWith().
             }
 
             if (line.startsWith("depth")) {
@@ -167,7 +169,7 @@ final class SceneParser {
             System.out.println("Unknown option: " + line);
         }
 
-        // Read material info
+        // ----------------- Read material info ------------------------------
 	// IDEA ANTIWARNING
 	// I find this easy to read.
         while ((line = readLine()) != null
@@ -221,7 +223,7 @@ final class SceneParser {
             System.out.println("Unknown material: " + line);
         }
 
-        // Read shapes
+        // ---------------- Read shapes ---------------------
 	// IDEA ANTIWARNING
 	// I find this easy to read.
         while ((line = readLine()) != null) {
@@ -286,7 +288,7 @@ final class SceneParser {
     private static String readLine() {
 	try {
             // Read to the next non-empty, non comment line.
-	// IDEA ANTIWARNING
+	// IDEA ANTIWARNING (Result of assignment used)
 	// I find this easy to read.
 	    String line;
 	    //IDEA ANTIWARNING II

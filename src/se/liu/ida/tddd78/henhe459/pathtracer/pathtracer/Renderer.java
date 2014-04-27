@@ -18,7 +18,6 @@ class Renderer {
 
     public void render(){
         long renderStart = System.currentTimeMillis();
-        // TODO Fixa det här för target = 0
 	boolean forever = (targetSamples == 0);
         while (targetSamples > 0 || forever) {
             camera.doPasses(writeInterval);

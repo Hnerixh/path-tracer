@@ -3,7 +3,7 @@ package se.liu.ida.tddd78.henhe459.pathtracer.pathtracer;
 import java.io.File;
 
 /**
- * This is the simple main file.
+ * Main entry point for the pathtracer.
  */
 
 // IDEA ANTIWARNING

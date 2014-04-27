@@ -45,7 +45,6 @@ public class Scene
                 if (hitInfo == null){ // Missed
 		    // IDEA ANTIWARNING
 		    // "continue with the next shape"
-		    // I think this is one of the prettier ways to do this.
                     continue;          // continue with next object
                 }
                 // Hit something. Figure out if it is the closest hit

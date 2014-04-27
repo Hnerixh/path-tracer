@@ -54,7 +54,7 @@ class CameraWorker implements Runnable {
     public void run() {
 	Radiance radiance = new Radiance(1.0, 1.0, 1.0);
         while (true) {
-            if (killswitch.shouldDie()){ //TODO fixa buggen
+            if (killswitch.shouldDie()){
                 return;
             }
             try {
@@ -64,11 +64,10 @@ class CameraWorker implements Runnable {
                 for (int i = job.start; i < job.end; i++) {
                     traces++;
                     radiance = scene.pathtrace(rayForPixel(i), depth, rrRatio, radiance);
-                    if (radiance.discarded()){
-                        continue; // IDEA ANTIWARNING "continue" with next pixel
-                    }
+                    if (! radiance.discarded()){
+
                     radiances[i].addRadiance(radiance);
-                    succesfulTraces++;
+                    succesfulTraces++; }
                 }
                 resultQueue.put(new TraceResult(traces, succesfulTraces));
             } catch (InterruptedException e) {
